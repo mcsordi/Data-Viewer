@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DrawerNav } from '../../../shared/components/DrawerNav/DrawerNav';
 import { ThemeButton } from '../../../shared/components/ThemeButton/ThemeButton';
+import { RxDoubleArrowRight } from 'react-icons/rx';
+
 type TCommonPage = {
   children: React.ReactNode;
   navigation: { icon: React.ReactNode; text: string; whereTo: string }[];
@@ -8,9 +10,16 @@ type TCommonPage = {
 type Navigation = { icon: React.ReactNode; text: string; whereTo: string };
 
 export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
+  const [showDrawer, setShowDrawer] = useState<boolean>(true);
+
+  const handleClick: () => void = () => {
+    return setShowDrawer((value) => !value);
+  };
   return (
     <div className="flex flex-row bg-white">
-      <div className="bg-slate-200 w-xs min-h-screen border border-slate-400 relative">
+      <div
+        className={`${showDrawer ? 'visible' : 'hidden'} relative z-10 sm:flex sm:flex-col sm:visible bg-slate-200 w-3/4 xs:w-2/4 sm:w-xs min-h-screen border border-slate-400`}
+      >
         <div className="bg-white border border-r-0 border-slate-400 h-28 flex items-center justify-center">
           <div className="w-20 border-0 rounded-full">
             <img
@@ -32,7 +41,17 @@ export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
         })}
         <ThemeButton />
       </div>
-      <div>{children}</div>
+      <button
+        className="border border-neutral-300 visible sm:hidden z-10 absolute"
+        onClick={handleClick}
+      >
+        {showDrawer ? (
+          <RxDoubleArrowRight className="rotate-180 ease-in-out transition duration-300" />
+        ) : (
+          <RxDoubleArrowRight className="ease-in-out transition duration-300" />
+        )}
+      </button>
+      <div className="flex absolute sm:relative">{children}</div>
     </div>
   );
 };

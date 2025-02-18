@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { CommonPage } from '../../layout/pages/CommonPage';
+import { CommonPage } from '../../layout/pages/CommonPage/CommonPage';
 import { FaHome } from 'react-icons/fa';
 import { BsBuildingsFill } from 'react-icons/bs';
 import { IoPeopleSharp } from 'react-icons/io5';
