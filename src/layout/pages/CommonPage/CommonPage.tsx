@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { DrawerNav } from '../../../shared/components/DrawerNav/DrawerNav';
 import { ThemeButton } from '../../../shared/components/ThemeButton/ThemeButton';
 import { RxDoubleArrowRight } from 'react-icons/rx';
+import { drawerBtn } from '../../../contexts/DrawerButton/context';
 
 type TCommonPage = {
   children: React.ReactNode;
@@ -10,11 +11,8 @@ type TCommonPage = {
 type Navigation = { icon: React.ReactNode; text: string; whereTo: string };
 
 export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
-  const [showDrawer, setShowDrawer] = useState<boolean>(true);
+  const { showDrawer, handleClick } = useContext(drawerBtn);
 
-  const handleClick: () => void = () => {
-    return setShowDrawer((value) => !value);
-  };
   return (
     <div className="flex flex-row bg-white">
       <div
@@ -41,17 +39,20 @@ export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
         })}
         <ThemeButton />
       </div>
-      <button
-        className="border border-neutral-300 visible sm:hidden z-10 absolute"
-        onClick={handleClick}
-      >
-        {showDrawer ? (
-          <RxDoubleArrowRight className="rotate-180 ease-in-out transition duration-300" />
-        ) : (
-          <RxDoubleArrowRight className="ease-in-out transition duration-300" />
-        )}
-      </button>
-      <div className="flex absolute sm:relative">{children}</div>
+
+      <div className="flex absolute sm:relative">
+        <button
+          className="border border-neutral-300 visible sm:hidden"
+          onClick={handleClick}
+        >
+          {showDrawer ? (
+            <RxDoubleArrowRight className="rotate-180 ease-in-out transition duration-300" />
+          ) : (
+            <RxDoubleArrowRight className="ease-in-out transition duration-300" />
+          )}
+        </button>
+        {children}
+      </div>
     </div>
   );
 };

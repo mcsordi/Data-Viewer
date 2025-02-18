@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { theme } from './index';
+import { theme } from './context';
 type TThemeContext = {
   children: React.ReactNode;
   darkTheme?: boolean;

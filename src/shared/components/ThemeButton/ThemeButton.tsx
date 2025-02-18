@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { MdLightMode } from 'react-icons/md';
-import { theme } from '../../../contexts/ThemeContext';
+import { theme } from '../../../contexts/ThemeContext/context';
 import { MdDarkMode } from 'react-icons/md';
 
 export const ThemeButton: React.FC = () => {
