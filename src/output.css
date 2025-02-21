@@ -743,11 +743,56 @@
   .border-slate-400 {
     border-color: var(--color-slate-400);
   }
+  .bg-amber-200 {
+    background-color: var(--color-amber-200);
+  }
+  .bg-amber-300 {
+    background-color: var(--color-amber-300);
+  }
+  .bg-amber-400 {
+    background-color: var(--color-amber-400);
+  }
   .bg-black {
     background-color: var(--color-black);
   }
+  .bg-cyan-100 {
+    background-color: var(--color-cyan-100);
+  }
+  .bg-cyan-400 {
+    background-color: var(--color-cyan-400);
+  }
+  .bg-cyan-600 {
+    background-color: var(--color-cyan-600);
+  }
+  .bg-emerald-50 {
+    background-color: var(--color-emerald-50);
+  }
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
+  }
+  .bg-gray-200 {
+    background-color: var(--color-gray-200);
+  }
+  .bg-neutral-100 {
+    background-color: var(--color-neutral-100);
+  }
   .bg-neutral-200 {
     background-color: var(--color-neutral-200);
+  }
+  .bg-neutral-300 {
+    background-color: var(--color-neutral-300);
+  }
+  .bg-neutral-400 {
+    background-color: var(--color-neutral-400);
+  }
+  .bg-neutral-500 {
+    background-color: var(--color-neutral-500);
+  }
+  .bg-sky-100 {
+    background-color: var(--color-sky-100);
+  }
+  .bg-sky-200 {
+    background-color: var(--color-sky-200);
   }
   .bg-slate-100 {
     background-color: var(--color-slate-100);
@@ -755,11 +800,68 @@
   .bg-slate-200 {
     background-color: var(--color-slate-200);
   }
+  .bg-slate-300 {
+    background-color: var(--color-slate-300);
+  }
+  .bg-slate-400 {
+    background-color: var(--color-slate-400);
+  }
   .bg-slate-500 {
     background-color: var(--color-slate-500);
   }
+  .bg-slate-600 {
+    background-color: var(--color-slate-600);
+  }
+  .bg-stone-200 {
+    background-color: var(--color-stone-200);
+  }
+  .bg-stone-300 {
+    background-color: var(--color-stone-300);
+  }
+  .bg-stone-400 {
+    background-color: var(--color-stone-400);
+  }
+  .bg-stone-500 {
+    background-color: var(--color-stone-500);
+  }
+  .bg-stone-600 {
+    background-color: var(--color-stone-600);
+  }
+  .bg-stone-800 {
+    background-color: var(--color-stone-800);
+  }
+  .bg-teal-100 {
+    background-color: var(--color-teal-100);
+  }
+  .bg-teal-200 {
+    background-color: var(--color-teal-200);
+  }
   .bg-white {
     background-color: var(--color-white);
+  }
+  .bg-yellow-100 {
+    background-color: var(--color-yellow-100);
+  }
+  .bg-yellow-200 {
+    background-color: var(--color-yellow-200);
+  }
+  .bg-zinc-100 {
+    background-color: var(--color-zinc-100);
+  }
+  .bg-zinc-200 {
+    background-color: var(--color-zinc-200);
+  }
+  .bg-zinc-300 {
+    background-color: var(--color-zinc-300);
+  }
+  .bg-zinc-400 {
+    background-color: var(--color-zinc-400);
+  }
+  .bg-zinc-500 {
+    background-color: var(--color-zinc-500);
+  }
+  .bg-zinc-600 {
+    background-color: var(--color-zinc-600);
   }
   .text-center {
     text-align: center;
@@ -783,6 +885,9 @@
   }
   .text-neutral-600 {
     color: var(--color-neutral-600);
+  }
+  .text-white {
+    color: var(--color-white);
   }
   .lowercase {
     text-transform: lowercase;
@@ -831,6 +936,98 @@
   .ease-in-out {
     --tw-ease: var(--ease-in-out);
     transition-timing-function: var(--ease-in-out);
+  }
+  .first\:bg-amber-400 {
+    &:first-child {
+      background-color: var(--color-amber-400);
+    }
+  }
+  .hover\:bg-gray-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-200);
+      }
+    }
+  }
+  .hover\:bg-neutral-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-neutral-200);
+      }
+    }
+  }
+  .hover\:bg-stone-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-stone-200);
+      }
+    }
+  }
+  .hover\:bg-stone-300 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-stone-300);
+      }
+    }
+  }
+  .hover\:bg-stone-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-stone-400);
+      }
+    }
+  }
+  .hover\:bg-zinc-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-zinc-200);
+      }
+    }
+  }
+  .hover\:bg-zinc-300 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-zinc-300);
+      }
+    }
+  }
+  .hover\:bg-zinc-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-zinc-400);
+      }
+    }
+  }
+  .hover\:bg-zinc-500 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-zinc-500);
+      }
+    }
+  }
+  .hover\:bg-zinc-800 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-zinc-800);
+      }
+    }
+  }
+  .focus\:bg-amber-300 {
+    &:focus {
+      background-color: var(--color-amber-300);
+    }
+  }
+  .active\:bg-amber-300 {
+    &:active {
+      background-color: var(--color-amber-300);
+    }
+  }
+  .active\:via-orange-200 {
+    &:active {
+      --tw-gradient-via: var(--color-orange-200);
+      --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-via-stops);
+    }
   }
   .xs\:w-2\/4 {
     @media (width >= 30rem) {
@@ -1063,4 +1260,46 @@
 @property --tw-ease {
   syntax: "*";
   inherits: false;
+}
+@property --tw-gradient-position {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-via {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-via-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tw-gradient-via-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --tw-gradient-to-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 100%;
 }

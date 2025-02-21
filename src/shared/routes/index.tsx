@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { CommonPage } from '../../layout/pages/CommonPage/CommonPage';
 import { FaHome } from 'react-icons/fa';
 import { BsBuildingsFill } from 'react-icons/bs';
@@ -49,6 +49,7 @@ export const RouterBrowser: React.FC = () => {
             </CommonPage>
           }
         />
+        <Route path={'/*'} element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );
