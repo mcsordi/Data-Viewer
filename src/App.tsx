@@ -5,7 +5,7 @@ import { DrawerButton } from './contexts/DrawerButton/DrawerButton';
 function App() {
   return (
     <ThemeContext>
-      <DrawerButton>
+      <DrawerButton visible>
         <RouterBrowser />
       </DrawerButton>
     </ThemeContext>

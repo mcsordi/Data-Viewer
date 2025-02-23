@@ -10,12 +10,12 @@ export const ThemeContext: React.FC<TThemeContext> = ({
   darkTheme = false,
 }) => {
   const handleTheme = useCallback(() => {
-    setThemeDefault((value) => !value);
+    setThemeDark((value) => !value);
   }, []);
 
-  const [themeDefault, setThemeDefault] = useState<boolean>(darkTheme);
+  const [themeDark, setThemeDark] = useState<boolean>(darkTheme);
   return (
-    <theme.Provider value={{ themeDefault, handleTheme }}>
+    <theme.Provider value={{ themeDark, handleTheme }}>
       {children}
     </theme.Provider>
   );

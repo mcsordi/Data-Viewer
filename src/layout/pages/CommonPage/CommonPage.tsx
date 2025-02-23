@@ -4,6 +4,7 @@ import { ThemeButton } from '../../../shared/components/ThemeButton/ThemeButton'
 import { RxDoubleArrowRight } from 'react-icons/rx';
 import { drawerBtn } from '../../../contexts/DrawerButton/context';
 import { useLocation } from 'react-router-dom';
+import { theme } from '../../../contexts/ThemeContext/context';
 
 type TCommonPage = {
   children: React.ReactNode;
@@ -11,26 +12,30 @@ type TCommonPage = {
     icon: React.ReactNode;
     text: string;
     whereTo: string;
-    color?: string;
+    selected?: false | string;
   }[];
 };
 type Navigation = {
   icon: React.ReactNode;
   text: string;
   whereTo: string;
-  color?: string;
+  selected?: false | string;
 };
 
 export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
   const { showDrawer, handleClick } = useContext(drawerBtn);
   const currentLocation = useLocation();
+  const { themeDark } = useContext(theme);
 
   return (
     <div className="flex flex-row bg-white">
       <div
-        className={`${showDrawer ? 'visible' : 'hidden'} relative z-10 sm:flex sm:flex-col sm:visible bg-stone-200 w-3/4 xs:w-2/4 sm:w-xs min-h-screen border border-slate-400`}
+        className={`${showDrawer ? 'visible' : 'hidden'} ${themeDark ? 'bg-zinc-700' : 'bg-white'} relative z-10 sm:flex sm:flex-col sm:visible
+        w-3/4 xs:w-2/4 sm:w-xs min-h-screen border border-slate-400`}
       >
-        <div className="bg-white border border-r-0 border-slate-400 h-28 flex items-center justify-center">
+        <div
+          className={`${themeDark ? 'bg-neutral-800' : 'bg-white'} border-l-0 border-t-0 border border-r-0 border-slate-400 h-28 flex items-center justify-center`}
+        >
           <div className="w-20 border-0 rounded-full">
             <img
               className="rounded-full"
@@ -46,10 +51,9 @@ export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
               icon={item.icon}
               text={item.text}
               whereTo={item.whereTo}
-              color={
-                currentLocation.pathname == item.whereTo
-                  ? 'bg-zinc-600 text-white '
-                  : 'bg-stone-200 hover:bg-zinc-400'
+              selected={
+                currentLocation.pathname == item.whereTo &&
+                `${themeDark ? 'bg-white text-zinc-900' : 'bg-zinc-600 hover:bg-zinc-600 text-white'}`
               }
             />
           );

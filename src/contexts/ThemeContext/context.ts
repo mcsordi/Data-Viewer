@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 type TTheme = {
-  themeDefault: boolean;
+  themeDark: boolean;
   handleTheme: () => void;
 };
 export const theme = createContext({} as TTheme);

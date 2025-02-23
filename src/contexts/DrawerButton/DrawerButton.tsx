@@ -1,12 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { Children } from '../../shared/types/Children';
 import { drawerBtn } from './context';
 
-export const DrawerButton: React.FC<Children> = ({ children }) => {
+type TDrawerButton = { children: React.ReactNode; visible?: boolean };
+export const DrawerButton: React.FC<TDrawerButton> = ({
+  children,
+  visible = false,
+}) => {
   const handleClick = useCallback(() => {
     setShowDrawer((value) => !value);
   }, []);
-  const [showDrawer, setShowDrawer] = useState<boolean>(false);
+  const [showDrawer, setShowDrawer] = useState<boolean>(visible);
   return (
     <drawerBtn.Provider value={{ showDrawer, handleClick }}>
       {children}
