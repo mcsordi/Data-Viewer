@@ -1,13 +1,11 @@
 import React, { useContext } from 'react';
 import { DrawerNav } from '../../../shared/components/DrawerNav/DrawerNav';
 import { ThemeButton } from '../../../shared/components/ThemeButton/ThemeButton';
-import { RxDoubleArrowRight } from 'react-icons/rx';
 import { drawerBtn } from '../../../contexts/DrawerButton/context';
-import { useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { theme } from '../../../contexts/ThemeContext/context';
 
 type TCommonPage = {
-  children: React.ReactNode;
   navigation: {
     icon: React.ReactNode;
     text: string;
@@ -22,15 +20,15 @@ type Navigation = {
   selected?: false | string;
 };
 
-export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
+export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
   const { showDrawer, handleClick } = useContext(drawerBtn);
   const currentLocation = useLocation();
   const { themeDark } = useContext(theme);
 
   return (
-    <div className="flex flex-row bg-white">
+    <div className={`flex flex-row`}>
       <div
-        className={`${showDrawer ? 'visible' : 'hidden'} ${themeDark ? 'bg-zinc-700' : 'bg-white'} relative z-10 sm:flex sm:flex-col sm:visible
+        className={`${showDrawer ? 'visible' : 'hidden'} ${themeDark ? 'bg-zinc-700' : 'bg-white'} relative z-10 md:flex md:flex-col md:visible
         w-3/4 xs:w-2/4 sm:w-xs min-h-screen border border-slate-400`}
       >
         <div
@@ -60,19 +58,10 @@ export const CommonPage: React.FC<TCommonPage> = ({ children, navigation }) => {
         })}
         <ThemeButton />
       </div>
-
-      <div className="flex absolute sm:relative">
-        <button
-          className="border border-neutral-300 visible sm:hidden"
-          onClick={handleClick}
-        >
-          {showDrawer ? (
-            <RxDoubleArrowRight className="rotate-180 ease-in-out transition duration-300" />
-          ) : (
-            <RxDoubleArrowRight className="ease-in-out transition duration-300" />
-          )}
-        </button>
-        {children}
+      <div
+        className={`flex h-screen w-full absolute md:relative ${themeDark ? 'bg-zinc-900' : 'bg-white'} p-12`}
+      >
+        <Outlet />
       </div>
     </div>
   );

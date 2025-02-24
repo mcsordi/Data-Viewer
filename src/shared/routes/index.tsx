@@ -3,6 +3,7 @@ import { CommonPage } from '../../layout/pages/CommonPage/CommonPage';
 import { FaHome } from 'react-icons/fa';
 import { BsBuildingsFill } from 'react-icons/bs';
 import { IoPeopleSharp } from 'react-icons/io5';
+import { HomePage } from '../../layout/pages/HomePage/HomePage';
 
 export const RouterBrowser: React.FC = () => {
   const navigate = [
@@ -25,31 +26,12 @@ export const RouterBrowser: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <CommonPage navigation={navigate}>
-              <p>init page</p>
-            </CommonPage>
-          }
-        />
-        <Route
-          path="/cidades"
-          element={
-            <CommonPage navigation={navigate}>
-              <p>cidades</p>
-            </CommonPage>
-          }
-        />
-        <Route
-          path="/pessoas"
-          element={
-            <CommonPage navigation={navigate}>
-              <p>pessoas</p>
-            </CommonPage>
-          }
-        />
-        <Route path={'/*'} element={<Navigate to="/" />} />
+        <Route path="/" element={<CommonPage navigation={navigate} />}>
+          <Route index element={<HomePage />} />
+          <Route path="/cidades" element={<p>cidades</p>} />
+          <Route path="/pessoas" element={<p>pessoas</p>} />
+          <Route path={'/*'} element={<Navigate to="/" />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
