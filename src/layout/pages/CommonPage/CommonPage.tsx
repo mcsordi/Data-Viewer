@@ -26,13 +26,14 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
   const { themeDark } = useContext(theme);
 
   return (
-    <div className={`flex flex-row h-screen`}>
+    <div className={`${themeDark} flex flex-row h-screen`}>
       <div
-        className={`${showDrawer ? 'visible' : 'hidden'} ${themeDark ? 'bg-zinc-700' : 'bg-white'} relative z-10 md:flex md:flex-col md:visible
+        className={`${showDrawer ? 'visible' : 'hidden'} dark:bg-zinc-800 bg-white relative z-10 md:flex md:flex-col md:visible
         w-3/4 xs:w-2/4 sm:w-xs h-screen border border-slate-400`}
       >
         <div
-          className={`${themeDark ? 'bg-neutral-800' : 'bg-white'} border-l-0 border-t-0 border border-r-0 border-slate-400 h-28 flex items-center justify-center`}
+          className={`dark:bg-neutral-800 bg-white border-l-0 border-t-0 border border-r-0
+             border-slate-400 h-28 flex items-center justify-center`}
         >
           <div className="w-20 border-0 rounded-full">
             <img
@@ -51,7 +52,7 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
               whereTo={item.whereTo}
               selected={
                 currentLocation.pathname == item.whereTo &&
-                `${themeDark ? 'bg-white text-zinc-900' : 'bg-zinc-600 hover:bg-zinc-600 text-white'}`
+                `dark:bg-white dark:text-zinc-900 bg-zinc-800  text-white`
               }
             />
           );
@@ -59,7 +60,7 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
         <ThemeButton />
       </div>
       <div
-        className={`flex h-full w-full absolute md:relative ${themeDark ? 'bg-zinc-900' : 'bg-white'} pt-8 xs:px-4 sm:px-8`}
+        className={`flex h-full w-full absolute md:relative dark:bg-zinc-900 bg-white pt-8 xs:px-4 sm:px-8`}
       >
         <Outlet />
       </div>

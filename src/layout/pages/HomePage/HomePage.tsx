@@ -1,43 +1,29 @@
-import React, { useContext } from 'react';
-import { theme } from '../../../contexts/ThemeContext/context';
-import { FaSearch } from 'react-icons/fa';
-import { FaSave } from 'react-icons/fa';
-import { IoArrowBackOutline } from 'react-icons/io5';
-import { RxDividerVertical } from 'react-icons/rx';
-import { MdEdit } from 'react-icons/md';
-import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
+import React from 'react';
+
+import { ContainerEditors } from '../../../shared/components/ContainerEditors/ContainerEditors';
+import { BiSolidSearchAlt2 } from 'react-icons/bi';
 
 export const HomePage: React.FC = () => {
-  const editIcons = [
-    { icon: <FaSearch />, textIcon: 'Pesquisar' },
-    { icon: <FaSave />, textIcon: 'Salvar' },
-    { icon: <MdEdit />, textIcon: 'Editar' },
-    {
-      icon: <RxDividerVertical />,
-      theresClass: false,
-      textClass: 'text-4xl',
-      itsButton: false,
-    },
-    { icon: <IoArrowBackOutline />, textIcon: 'Voltar' },
-  ];
-
-  const { themeDark } = useContext(theme);
   return (
-    <div className={`${themeDark && 'text-white'} flex w-full`}>
-      <div
-        className={`${themeDark ? 'bg-neutral-800' : ' bg-white'} border flex items-center justify-start border-slate-400 w-full h-14 rounded-md text-2xl gap-3 p-4`}
-      >
-        {editIcons.map((icon, index) => (
-          <EditComponent
-            key={index}
-            icon={icon.icon}
-            textClass={icon.textClass}
-            theresClass={icon.theresClass}
-            itsButton={icon.itsButton}
-            textIcon={icon.textIcon}
+    <div className={`dark:text-white flex w-full`}>
+      <ContainerEditors>
+        <div className="w-full h-10">
+          <input
+            placeholder="Pesquise algum nome aqui"
+            type="search"
+            className="border-2 border-slate-500 dark:border-amber-300 rounded-md h-full outline-0 p-2 w-lg
+            dark:placeholder:text-gray-300 placeholder:text-gray-500"
           />
-        ))}
-      </div>
+        </div>
+        <div>
+          <button
+            className="dark:bg-amber-300 bg-slate-600 border-0 flex items-center justify-center p-2 rounded-md
+          cursor-pointer hover:bg-slate-200"
+          >
+            <BiSolidSearchAlt2 className="dark:text-zinc-800 text-white hover:text-black" />
+          </button>
+        </div>
+      </ContainerEditors>
     </div>
   );
 };
