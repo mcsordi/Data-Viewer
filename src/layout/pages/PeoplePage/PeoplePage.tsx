@@ -1,12 +1,12 @@
 import React from 'react';
-import { ContainerEditors } from '../../../shared/components/ContainerEditors/ContainerEditors';
+import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 
 export const PeoplePage: React.FC<IconsEditPage> = ({ editIcons }) => {
   return (
     <div className={`dark:text-white flex w-full`}>
-      <ContainerEditors>
+      <ContainerGeneric>
         {editIcons.map((icon, index) => (
           <EditComponent
             key={index}
@@ -17,7 +17,7 @@ export const PeoplePage: React.FC<IconsEditPage> = ({ editIcons }) => {
             textIcon={icon.textIcon}
           />
         ))}
-      </ContainerEditors>
+      </ContainerGeneric>
     </div>
   );
 };

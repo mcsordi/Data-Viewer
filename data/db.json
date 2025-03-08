@@ -1,0 +1,32 @@
+{
+  "pessoas": [
+    {
+      "nome": "Emilia Marengo",
+      "email": "emilia@gmail.com"
+    },
+    {
+      "nome": "Matheus Caris",
+      "email": "matheus@gmail.com"
+    },
+    { "nome": "Alice Johnson", "email": "alice.johnson@example.com" },
+    { "nome": "Bob Smith", "email": "bob.smith@example.com" },
+    { "nome": "Charlie Davis", "email": "charlie.davis@example.com" },
+    { "nome": "Dana White", "email": "dana.white@example.com" },
+    { "nome": "Evan Miller", "email": "evan.miller@example.com" },
+    { "nome": "Fiona Brown", "email": "fiona.brown@example.com" },
+    { "nome": "George Wilson", "email": "george.wilson@example.com" },
+    { "nome": "Hannah Lee", "email": "hannah.lee@example.com" },
+    { "nome": "Ian Scott", "email": "ian.scott@example.com" },
+    { "nome": "Julia Carter", "email": "julia.carter@example.com" },
+    { "nome": "Kevin Adams", "email": "kevin.adams@example.com" },
+    { "nome": "Lily Evans", "email": "lily.evans@example.com" },
+    { "nome": "Michael Turner", "email": "michael.turner@example.com" },
+    { "nome": "Nora Robinson", "email": "nora.robinson@example.com" },
+    { "nome": "Oscar Mitchell", "email": "oscar.mitchell@example.com" },
+    { "nome": "Paula Sanchez", "email": "paula.sanchez@example.com" },
+    { "nome": "Quentin Hughes", "email": "quentin.hughes@example.com" },
+    { "nome": "Rachel Bennett", "email": "rachel.bennett@example.com" },
+    { "nome": "Samuel Collins", "email": "samuel.collins@example.com" },
+    { "nome": "Tina Foster", "email": "tina.foster@example.com" }
+  ]
+}
