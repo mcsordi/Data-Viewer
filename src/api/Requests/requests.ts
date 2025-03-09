@@ -1,5 +1,5 @@
-import { TPeopleData } from '../../layout/pages/HomePage/HomePage';
 import constants from '../../shared/facilities';
+import { TPeopleData } from '../../shared/types/PeopleData';
 
 export const apiRequests = {
   async getAll(name?: string, page = 1) {

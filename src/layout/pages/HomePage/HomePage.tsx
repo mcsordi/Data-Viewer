@@ -1,27 +1,30 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { BiSolidSearchAlt2 } from 'react-icons/bi';
 import { apiRequests } from '../../../api/Requests/requests';
 import constants from '../../../shared/facilities';
-export type TPeopleData = {
-  nome: string;
-  email: string;
-}[];
+import { TPeopleData } from '../../../shared/types/PeopleData';
+import { useSearchParams } from 'react-router-dom';
 
 export const HomePage: React.FC = () => {
-  const [inputFocus, setInputFocus] = useState<boolean>(false);
   const focusRef = useRef<HTMLInputElement>(null);
-  const [isWritten, setIsWritten] = useState<string>('');
   const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
   const [responseError, setResponseError] = useState<unknown>();
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [writing, setWriting] = useState<string>('');
+  const [searchParams, setSearchParams] = useSearchParams({
+    nome: '',
+    pagina: '1',
+  });
+  const peopleName = searchParams.get('nome');
+  const currentPage = searchParams.get('pagina');
   useEffect(() => {
     const getPeopleData = async () => {
       try {
-        const result = await apiRequests.getAll();
-        setPeopleData(result);
+        setPeopleData(
+          await apiRequests.getAll(peopleName?.toString(), Number(currentPage)),
+        );
         setLoading(false);
       } catch (error) {
         setResponseError(error);
@@ -30,30 +33,35 @@ export const HomePage: React.FC = () => {
       setLoading(false);
     };
     getPeopleData();
-  }, []);
+  });
 
-  const handleFocus = useCallback(() => {
-    setInputFocus((prev) => !prev);
-  }, []);
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full">
       <ContainerGeneric>
         <div className="w-full h-10">
           <input
             ref={focusRef}
+            value={peopleName || ''}
             placeholder="Pesquise algum nome aqui"
             type="search"
             className="w-full p-2 bg-slate-100 dark:bg-neutral-700 border dark:border-white border-slate-500  rounded-md h-full outline-0 md:w-lg
             dark:placeholder:text-gray-300 placeholder:text-gray-500"
-            onFocus={(e) => e.target && handleFocus()}
-            onBlur={(e) => e.target && handleFocus()}
-            onChange={(e) => setIsWritten(e.target.value)}
+            onChange={(e) => {
+              setSearchParams((prev) => {
+                prev.set('nome', e.target.value);
+                return prev;
+              }),
+                setWriting(e.target.value);
+              setTimeout(() => {
+                setWriting('');
+              }, 300);
+            }}
           />
         </div>
         <div>
           <button
-            disabled={isWritten == '' ? true : false}
-            className={`hidden lg:flex ${inputFocus && isWritten != '' ? 'bg-amber-300 border-amber-300 border dark:border-amber-300 dark:bg-amber-300 ' : 'bg-neutral-900 border border-slate-400 dark:bg-white'}
+            disabled={writing == '' ? true : false}
+            className={`hidden lg:flex ${writing != '' ? 'bg-amber-300 border-amber-300 border dark:border-amber-300 dark:bg-amber-300 ' : 'bg-neutral-900 border border-slate-400 dark:bg-white'}
              flex items-center justify-center px-4 py-2 rounded-md
           cursor-pointer`}
             onClick={() => focusRef?.current?.focus()}
