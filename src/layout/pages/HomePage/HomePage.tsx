@@ -6,34 +6,36 @@ import { apiRequests } from '../../../api/Requests/requests';
 import constants from '../../../shared/facilities';
 import { TPeopleData } from '../../../shared/types/PeopleData';
 import { useSearchParams } from 'react-router-dom';
-
+import { useDebounce } from '../../../shared/hooks';
 export const HomePage: React.FC = () => {
   const focusRef = useRef<HTMLInputElement>(null);
   const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
   const [responseError, setResponseError] = useState<unknown>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [writing, setWriting] = useState<string>('');
   const [searchParams, setSearchParams] = useSearchParams({
     nome: '',
     pagina: '1',
   });
   const peopleName = searchParams.get('nome');
   const currentPage = searchParams.get('pagina');
+  const debouncing = useDebounce(peopleName || '');
   useEffect(() => {
     const getPeopleData = async () => {
       try {
-        setPeopleData(
-          await apiRequests.getAll(peopleName?.toString(), Number(currentPage)),
+        const response = await apiRequests.getAll(
+          debouncing,
+          Number(currentPage),
         );
+        setPeopleData(response);
         setLoading(false);
       } catch (error) {
         setResponseError(error);
+      } finally {
         setLoading(false);
       }
-      setLoading(false);
     };
     getPeopleData();
-  });
+  }, [currentPage, debouncing]);
 
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full">
@@ -48,21 +50,16 @@ export const HomePage: React.FC = () => {
             dark:placeholder:text-gray-300 placeholder:text-gray-500"
             onChange={(e) => {
               setSearchParams((prev) => {
-                prev.set('nome', e.target.value);
+                prev.set('nome', e.target.value.trimStart());
                 return prev;
-              }),
-                setWriting(e.target.value);
-              setTimeout(() => {
-                setWriting('');
-              }, 300);
+              });
             }}
           />
         </div>
         <div>
           <button
-            disabled={writing == '' ? true : false}
-            className={`hidden lg:flex ${writing != '' ? 'bg-amber-300 border-amber-300 border dark:border-amber-300 dark:bg-amber-300 ' : 'bg-neutral-900 border border-slate-400 dark:bg-white'}
-             flex items-center justify-center px-4 py-2 rounded-md
+            className={`hidden lg:flex bg-neutral-900 border border-slate-400 dark:bg-white
+             md:flex items-center justify-center px-4 py-2 rounded-md
           cursor-pointer`}
             onClick={() => focusRef?.current?.focus()}
           >
@@ -110,6 +107,11 @@ export const HomePage: React.FC = () => {
                   <td className="w-full py-2 pl-4">{el.email}</td>
                 </tr>
               ))
+            )}
+            {peopleData?.length == 0 && (
+              <tr>
+                <td>Nenhum resultado para {`"${peopleName}"`}</td>
+              </tr>
             )}
           </thead>
           <tbody className="first:bg-amber-300 "></tbody>
