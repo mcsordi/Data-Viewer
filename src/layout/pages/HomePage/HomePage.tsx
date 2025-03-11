@@ -7,6 +7,8 @@ import constants from '../../../shared/facilities';
 import { TPeopleData } from '../../../shared/types/PeopleData';
 import { useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
+import { FaChevronLeft } from 'react-icons/fa';
+
 export const HomePage: React.FC = () => {
   const focusRef = useRef<HTMLInputElement>(null);
   const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
@@ -17,16 +19,30 @@ export const HomePage: React.FC = () => {
     pagina: '1',
   });
   const peopleName = searchParams.get('nome');
-  const currentPage = searchParams.get('pagina');
+  const currentPage = Number(searchParams.get('pagina'));
   const debouncing = useDebounce(peopleName || '');
+  const [peopleLength, setPeopleLength] = useState<number | undefined>(0);
+  const [numOfPages, setNumOfPages] = useState<number>();
+  const loopPages = () => {
+    const arr = [];
+    if (numOfPages != undefined) {
+      for (let i = 1; i <= numOfPages; i++) {
+        arr.push(i);
+      }
+    }
+    return arr;
+  };
+  loopPages();
   useEffect(() => {
     const getPeopleData = async () => {
+      setLoading(true);
       try {
         const response = await apiRequests.getAll(
           debouncing,
           Number(currentPage),
         );
-        setPeopleData(response);
+        setPeopleData(response?.data);
+        setPeopleLength(response?.totalCount);
         setLoading(false);
       } catch (error) {
         setResponseError(error);
@@ -37,6 +53,12 @@ export const HomePage: React.FC = () => {
     getPeopleData();
   }, [currentPage, debouncing]);
 
+  useEffect(() => {
+    if (peopleLength != undefined) {
+      return setNumOfPages(Math.ceil(peopleLength / constants.MAX_LINHAS));
+    }
+  }, [peopleLength]);
+
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full">
       <ContainerGeneric>
@@ -46,11 +68,12 @@ export const HomePage: React.FC = () => {
             value={peopleName || ''}
             placeholder="Pesquise algum nome aqui"
             type="search"
-            className="w-full p-2 bg-slate-100 dark:bg-neutral-700 border dark:border-white border-slate-500  rounded-md h-full outline-0 md:w-lg
+            className="focus:border-2 focus:border-amber-400 w-full p-2 bg-slate-100 dark:bg-neutral-700 border dark:border-white border-slate-500  rounded-md h-full outline-0 md:w-lg
             dark:placeholder:text-gray-300 placeholder:text-gray-500"
             onChange={(e) => {
               setSearchParams((prev) => {
                 prev.set('nome', e.target.value.trimStart());
+                prev.set('pagina', '1');
                 return prev;
               });
             }}
@@ -108,14 +131,59 @@ export const HomePage: React.FC = () => {
                 </tr>
               ))
             )}
-            {peopleData?.length == 0 && (
+            {peopleData?.length == 0 && !responseError && (
               <tr>
                 <td>Nenhum resultado para {`"${peopleName}"`}</td>
               </tr>
             )}
           </thead>
-          <tbody className="first:bg-amber-300 "></tbody>
+          <tbody className="first:bg-amber-300"></tbody>
         </table>
+        <div className="flex w-full items-center justify-center gap-0.5 pt-4 mb-2">
+          <div>
+            <FaChevronLeft
+              className="text-xl cursor-pointer font-bold"
+              onClick={() => {
+                const minus = currentPage - 1;
+                setSearchParams((prev) => {
+                  prev.set('pagina', minus > 1 ? minus.toString() : '1');
+                  return prev;
+                });
+              }}
+            />
+          </div>
+          {loopPages().map((el, idx) => {
+            return (
+              <div
+                className={`${idx + 1 === currentPage && 'bg-amber-300 text-white rounded-md px-2 dark:text-neutral-800'} px-1 cursor-pointer text-2xl`}
+                key={idx}
+                onClick={(e) => {
+                  setSearchParams((prev) => {
+                    prev.set('pagina', e.currentTarget.innerHTML);
+                    return prev;
+                  });
+                }}
+              >
+                {el}
+              </div>
+            );
+          })}
+          <div>
+            <FaChevronLeft
+              className="rotate-180 text-xl cursor-pointer font-bold"
+              onClick={() => {
+                if (numOfPages !== undefined) {
+                  const plus =
+                    currentPage < numOfPages ? currentPage + 1 : numOfPages;
+                  setSearchParams((prev) => {
+                    prev.set('pagina', plus.toString());
+                    return prev;
+                  });
+                }
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

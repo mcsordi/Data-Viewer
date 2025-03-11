@@ -8,7 +8,13 @@ export const apiRequests = {
         `${constants.API_URL}?nome_like=${name || ''}&_page=${page}&_limit=${constants.MAX_LINHAS}`,
       );
       const peopleDataJson: TPeopleData = await getPeopleData.json();
-      return peopleDataJson;
+      const peopleLength = Number(
+        getPeopleData.headers.get('X-total-count') || 0,
+      );
+      return {
+        data: peopleDataJson,
+        totalCount: peopleLength,
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(error);
