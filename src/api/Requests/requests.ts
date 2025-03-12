@@ -22,4 +22,19 @@ export const apiRequests = {
       }
     }
   },
+  async deleteById(id: number) {
+    try {
+      const deleteMethod = await fetch(`${constants.API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return deleteMethod;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw Error(constants.ERRO_DELETAR);
+      }
+    }
+  },
 };

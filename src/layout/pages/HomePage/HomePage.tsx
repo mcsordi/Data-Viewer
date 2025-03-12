@@ -25,6 +25,8 @@ export const HomePage: React.FC = () => {
   const debouncing = useDebounce(peopleName || '');
   const [peopleLength, setPeopleLength] = useState<number | undefined>(0);
   const [numOfPages, setNumOfPages] = useState<number>();
+  const [deleted, setDeleted] = useState<number>();
+
   const loopPagination = () => {
     const arr = [];
     if (numOfPages != undefined) {
@@ -34,7 +36,6 @@ export const HomePage: React.FC = () => {
     }
     return arr;
   };
-  loopPagination();
   useEffect(() => {
     const getPeopleData = async () => {
       setLoading(true);
@@ -53,7 +54,7 @@ export const HomePage: React.FC = () => {
       }
     };
     getPeopleData();
-  }, [currentPage, debouncing]);
+  }, [currentPage, debouncing, deleted]);
 
   useEffect(() => {
     if (peopleLength != undefined) {
@@ -123,8 +124,30 @@ export const HomePage: React.FC = () => {
                   key={index}
                 >
                   <td className="w-full py-2 pl-4 flex gap-3 text-xl">
-                    <MdEdit className="cursor-pointer" />
-                    <MdDelete className="cursor-pointer" />
+                    <MdEdit
+                      className="cursor-pointer"
+                      onClick={() => {
+                        return console.log('edit');
+                      }}
+                    />
+                    <MdDelete
+                      className="cursor-pointer"
+                      onClick={() => {
+                        apiRequests.deleteById(el.id);
+                        setDeleted(el.id);
+                        if (peopleLength != undefined) {
+                          if (Math.ceil((peopleLength - 1) / 7) < currentPage) {
+                            setSearchParams((prev) => {
+                              prev.set(
+                                'pagina',
+                                Math.ceil((peopleLength - 1) / 7).toString(),
+                              );
+                              return prev;
+                            });
+                          }
+                        }
+                      }}
+                    />
                     <IoMdSave className="cursor-pointer" />
                   </td>
                   <td className="w-full py-2 pl-4">{el.nome}</td>
