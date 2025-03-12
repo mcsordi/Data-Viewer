@@ -3,11 +3,13 @@ import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { BiSolidSearchAlt2 } from 'react-icons/bi';
 import { apiRequests } from '../../../api/Requests/requests';
-import constants from '../../../shared/facilities';
+import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
 import { TPeopleData } from '../../../shared/types/PeopleData';
 import { useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
-import { FaChevronLeft } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
+import { IoMdSave } from 'react-icons/io';
+import { Pagination } from '../../../shared/components/Pagination/Pagination';
 
 export const HomePage: React.FC = () => {
   const focusRef = useRef<HTMLInputElement>(null);
@@ -23,7 +25,7 @@ export const HomePage: React.FC = () => {
   const debouncing = useDebounce(peopleName || '');
   const [peopleLength, setPeopleLength] = useState<number | undefined>(0);
   const [numOfPages, setNumOfPages] = useState<number>();
-  const loopPages = () => {
+  const loopPagination = () => {
     const arr = [];
     if (numOfPages != undefined) {
       for (let i = 1; i <= numOfPages; i++) {
@@ -32,7 +34,7 @@ export const HomePage: React.FC = () => {
     }
     return arr;
   };
-  loopPages();
+  loopPagination();
   useEffect(() => {
     const getPeopleData = async () => {
       setLoading(true);
@@ -105,17 +107,16 @@ export const HomePage: React.FC = () => {
               </th>
             </tr>
             {loading && (
-              <tr>
-                <td className="w-screen border bg-amber-300 h-2.5 ">
-                  <div className="w-full bg-gray-500 h-2 animate-pulse"></div>
-                </td>
+              <tr className="flex items-center justify-center mt-4 mb-4">
+                <td className="w-full bg-amber-300 animate-pulse h-2.5 rounded-md border border-slate-500 dark:border-slate-400"></td>
               </tr>
             )}
             {responseError ? (
               <tr>
-                <td className="py-2">{constants.ERRO_CARREGAMENTO}</td>
+                <td className="py-4">{constants.ERRO_CARREGAMENTO}</td>
               </tr>
             ) : (
+              !loading &&
               peopleData?.map((el, index) => (
                 <tr
                   className="w-full truncate items-start flex justify-between odd:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800"
@@ -123,67 +124,34 @@ export const HomePage: React.FC = () => {
                 >
                   <td className="w-full py-2 pl-4 flex gap-3 text-xl">
                     <MdEdit className="cursor-pointer" />
-                    <MdEdit className="cursor-pointer" />
-                    <MdEdit className="cursor-pointer" />
+                    <MdDelete className="cursor-pointer" />
+                    <IoMdSave className="cursor-pointer" />
                   </td>
                   <td className="w-full py-2 pl-4">{el.nome}</td>
                   <td className="w-full py-2 pl-4">{el.email}</td>
                 </tr>
               ))
             )}
-            {peopleData?.length == 0 && !responseError && (
+            {!loading && peopleData?.length == 0 && !responseError && (
               <tr>
-                <td>Nenhum resultado para {`"${peopleName}"`}</td>
+                <td className="py-4">{NENHUM_RESULTADO(peopleName || '')}</td>
               </tr>
             )}
           </thead>
           <tbody className="first:bg-amber-300"></tbody>
         </table>
-        <div className="flex w-full items-center justify-center gap-0.5 pt-4 mb-2">
-          <div>
-            <FaChevronLeft
-              className="text-xl cursor-pointer font-bold"
-              onClick={() => {
-                const minus = currentPage - 1;
-                setSearchParams((prev) => {
-                  prev.set('pagina', minus > 1 ? minus.toString() : '1');
-                  return prev;
-                });
-              }}
+        {!loading && !responseError && (
+          <div
+            className={`${numOfPages != undefined && numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
+          >
+            <Pagination
+              currentPage={currentPage}
+              loopPagination={loopPagination()}
+              numOfPages={numOfPages}
+              setSearchParams={setSearchParams}
             />
           </div>
-          {loopPages().map((el, idx) => {
-            return (
-              <div
-                className={`${idx + 1 === currentPage && 'bg-amber-300 text-white rounded-md px-2 dark:text-neutral-800'} px-1 cursor-pointer text-2xl`}
-                key={idx}
-                onClick={(e) => {
-                  setSearchParams((prev) => {
-                    prev.set('pagina', e.currentTarget.innerHTML);
-                    return prev;
-                  });
-                }}
-              >
-                {el}
-              </div>
-            );
-          })}
-          <div>
-            <FaChevronLeft
-              className="rotate-180 text-xl cursor-pointer font-bold"
-              onClick={() => {
-                if (numOfPages !== undefined) {
-                  const plus =
-                    currentPage < numOfPages ? currentPage + 1 : numOfPages;
-                  setSearchParams((prev) => {
-                    prev.set('pagina', plus.toString());
-                    return prev;
-                  });
-                }
-              }}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
