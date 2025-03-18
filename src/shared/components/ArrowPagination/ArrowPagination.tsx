@@ -16,18 +16,20 @@ export const ArrowPagination: React.FC<TArrowPagination> = ({
   return (
     <div>
       <FaChevronLeft
-        className={`${numOfPages != undefined && numOfPages < 1 && 'hidden'} ${edition} text-xl cursor-pointer font-bold`}
+        className={`${edition !== 'rotate-180' && currentPage == 1 && 'text-slate-300 dark:text-neutral-500'}
+         ${numOfPages != undefined && numOfPages < 1 && 'hidden'} ${edition} text-xl cursor-pointer font-bold
+         ${currentPage == numOfPages && edition == 'rotate-180' && 'text-slate-300 dark:text-neutral-500'}`}
         onClick={() => {
-          const minus = currentPage - 1;
+          const minus =
+            currentPage - 1 == 1 || currentPage == 1 ? 1 : currentPage - 1;
           if (numOfPages !== undefined) {
             const plus =
               currentPage < numOfPages ? currentPage + 1 : numOfPages;
+
             setSearchParams((prev: URLSearchParams) => {
               prev.set(
                 'pagina',
-                edition == 'rotate-180'
-                  ? plus.toString()
-                  : `${minus > 1 ? minus.toString() : '1'} `,
+                edition == 'rotate-180' ? plus.toString() : minus.toString(),
               );
               return prev;
             });

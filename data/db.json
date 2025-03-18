@@ -94,6 +94,18 @@
       "id": 20,
       "nome": "Thiago Moreira",
       "email": "thiago.moreira@example.com"
+    },
+    {
+      "nome": "Tiaguinho",
+      "email": "tiaguinho@gmail.com",
+      "cidade": "Campo Mourão",
+      "id": 21
+    },
+    {
+      "nome": "Brad Pit",
+      "email": "brad@example.com",
+      "cidade": "Toledo",
+      "id": 22
     }
   ]
 }

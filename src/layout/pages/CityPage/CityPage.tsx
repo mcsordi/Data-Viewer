@@ -15,6 +15,11 @@ export const CityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
             theresClass={icon.theresClass}
             itsButton={icon.itsButton}
             textIcon={icon.textIcon}
+            whereToNav={
+              icon.textIcon == 'Voltar' || icon.textIcon == 'Pesquisar'
+                ? '/cidades'
+                : ''
+            }
           />
         ))}
       </ContainerGeneric>

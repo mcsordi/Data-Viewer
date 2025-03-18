@@ -11,6 +11,7 @@ import { RxDividerVertical } from 'react-icons/rx';
 import { MdEdit } from 'react-icons/md';
 import { CityPage } from '../../layout/pages/CityPage/CityPage';
 import { PeoplePage } from '../../layout/pages/PeoplePage/PeoplePage';
+import { NewPersonCadaster } from '../../layout/pages/NewPersonCadaster/NewCadaster';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
@@ -23,7 +24,10 @@ export const RouterBrowser: React.FC = () => {
       textClass: 'text-4xl',
       itsButton: false,
     },
-    { icon: <IoArrowBackOutline />, textIcon: 'Voltar' },
+    {
+      icon: <IoArrowBackOutline />,
+      textIcon: 'Voltar',
+    },
   ];
   const navigate = [
     {
@@ -48,9 +52,10 @@ export const RouterBrowser: React.FC = () => {
         <Route path="/" element={<CommonPage navigation={navigate} />}>
           <Route index element={<HomePage />} />
           <Route path="/cidades" element={<CityPage editIcons={editIcons} />} />
+          <Route path="/pessoas" element={<PeoplePage />} />
           <Route
-            path="/pessoas"
-            element={<PeoplePage editIcons={editIcons} />}
+            path="/nova-pessoa"
+            element={<NewPersonCadaster editIcons={editIcons} />}
           />
           <Route path={'/*'} element={<Navigate to="/" />} />
         </Route>

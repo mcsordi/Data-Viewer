@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { firstButton } from '../../../contexts/FirstEditButton/context';
+import { useNavigate } from 'react-router-dom';
 type TEditComponent = {
   icon: React.ReactNode;
   textIcon?: string;
   theresClass?: boolean;
   textClass?: string;
   itsButton?: boolean;
+  whereToNav?: string;
 };
 
 export const EditComponent: React.FC<TEditComponent> = ({
@@ -14,7 +16,9 @@ export const EditComponent: React.FC<TEditComponent> = ({
   theresClass = true,
   textClass,
   itsButton = true,
+  whereToNav = '',
 }) => {
+  const navigate = useNavigate();
   {
     const { inBlur, handleBlur } = useContext(firstButton);
 
@@ -26,6 +30,7 @@ export const EditComponent: React.FC<TEditComponent> = ({
          flex items-center gap-2 border py-1 px-2 rounded-md border-slate-400 cursor-pointer`}
         onFocus={(e) => e.target && handleBlur()}
         onBlur={(e) => e.target && handleBlur()}
+        onClick={() => navigate(whereToNav)}
       >
         {icon}
         <div

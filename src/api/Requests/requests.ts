@@ -37,4 +37,16 @@ export const apiRequests = {
       }
     }
   },
+  async postNewUser(name: string, email: string, city: string) {
+    try {
+      const postMethod = await fetch(constants.API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: name, email: email, cidade: city }),
+      });
+      return postMethod;
+    } catch (error) {
+      throw Error(constants.ERRO_CADASTRAR);
+    }
+  },
 };

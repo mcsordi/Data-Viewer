@@ -3,6 +3,7 @@ const constants = {
   MAX_LINHAS: 7,
   ERRO_CARREGAMENTO: 'Falha ao carregar listagem',
   ERRO_DELETAR: 'Falha ao deletar item',
+  ERRO_CADASTRAR: 'Falha ao Cadastrar',
 };
 
 export const NENHUM_RESULTADO = (name: string) => {

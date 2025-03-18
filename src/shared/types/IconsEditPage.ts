@@ -5,5 +5,6 @@ export type IconsEditPage = {
     theresClass?: boolean;
     textClass?: string;
     itsButton?: boolean;
+    whereToNav?: string;
   }[];
 };
