@@ -4,7 +4,7 @@ import { ContainerGeneric } from '../../../shared/components/ContainerEditors/Co
 import { apiRequests } from '../../../api/Requests/requests';
 import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
 import { TPeopleData } from '../../../shared/types/PeopleData';
-import { Link, Navigate, NavLink, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
 import { MdDelete } from 'react-icons/md';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
@@ -121,12 +121,9 @@ export const PeoplePage: React.FC = () => {
                   key={index}
                 >
                   <td className="w-full py-2 pl-4 flex gap-3 text-xl">
-                    <MdEdit
-                      className="cursor-pointer"
-                      onClick={() => {
-                        ('');
-                      }}
-                    />
+                    <Link to={`/editar/${el.nome}`}>
+                      <MdEdit className="cursor-pointer" />
+                    </Link>
                     <MdDelete
                       className="cursor-pointer"
                       onClick={() => {

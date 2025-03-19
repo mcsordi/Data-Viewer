@@ -6,11 +6,15 @@ import { Form, Formik } from 'formik';
 import { Input } from '../../../shared/components/Input/Input';
 import { apiRequests } from '../../../api/Requests/requests';
 import { validationSchema } from './SchemaValidation';
+import { HeaderPage } from '../../../shared/components/HeaderPage/HeaderPage';
+import { FormContainer } from '../../../shared/components/FormContainer/FormContainer';
+import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
+import constants from '../../../shared/facilities';
 
 export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   return (
     <div className="w-full h-screen dark:text-white">
-      <h1>Novo Cadastro</h1>
+      <HeaderPage text="Novo Cadastro" />
       <ContainerGeneric>
         {editIcons.map((icon, index) => {
           return (
@@ -30,12 +34,12 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
           );
         })}
       </ContainerGeneric>
-      <div className="w-full flex flex-col pt-5 gap- items-start">
+      <FormContainer>
         <Formik
           initialValues={{ name: '', email: '', city: '' }}
           validationSchema={validationSchema}
-          onSubmit={({ name, email, city }, { resetForm }) => {
-            apiRequests.postNewUser(name, email, city);
+          onSubmit={async ({ name, email, city }, { resetForm }) => {
+            await apiRequests.postNewUser(name, email, city);
             resetForm({ values: { name: '', city: '', email: '' } });
           }}
         >
@@ -44,34 +48,27 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
               name="name"
               id="name"
               label="Nome"
-              placeholder="Ermelino Matarazo"
+              placeholder={constants.NOME_EXEMPLO}
               type="text"
             />
             <Input
               name="email"
               id="email"
               label="Email"
-              placeholder="ermelino@gmail.com"
+              placeholder={constants.EMAIL_EXEMPLO}
               type="email"
             />
             <Input
               name="city"
               id="city"
               label="Cidade"
-              placeholder="Mamborê"
+              placeholder={constants.CIDADE_EXEMPLO}
               type="text"
             />
-            <button
-              type="submit"
-              className="w-96 disabled:bg-amber-700 border px-2 py-2 mt-2 rounded-md cursor-pointer
-               bg-slate-600 dark:bg-amber-300 text-white dark:text-black font-bold
-            hover:bg-neutral-800 dark:hover:bg-white"
-            >
-              Enviar
-            </button>
+            <SubmitButton text="Enviar" />
           </Form>
         </Formik>
-      </div>
+      </FormContainer>
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { MdEdit } from 'react-icons/md';
 import { CityPage } from '../../layout/pages/CityPage/CityPage';
 import { PeoplePage } from '../../layout/pages/PeoplePage/PeoplePage';
 import { NewPersonCadaster } from '../../layout/pages/NewPersonCadaster/NewCadaster';
+import { EditPersonPage } from '../../layout/pages/EditPersonPage/EditPersonPage';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
@@ -56,6 +57,10 @@ export const RouterBrowser: React.FC = () => {
           <Route
             path="/nova-pessoa"
             element={<NewPersonCadaster editIcons={editIcons} />}
+          />
+          <Route
+            path="/editar/:nome"
+            element={<EditPersonPage editIcons={editIcons} />}
           />
           <Route path={'/*'} element={<Navigate to="/" />} />
         </Route>
