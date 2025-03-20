@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
-import { apiRequests } from '../../../api/Requests/requests';
+import { peopleRequests } from '../../../api/PeopleRequests/requests';
 import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
 import { TPeopleData } from '../../../shared/types/PeopleData';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
 import { MdDelete } from 'react-icons/md';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
+import { SearchInput } from '../../../shared/components/SearchInput/SearchInput';
+import { NewButton } from '../../../shared/components/NewButton/NewButton';
+import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
+import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 
 export const PeoplePage: React.FC = () => {
   const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
@@ -34,10 +38,10 @@ export const PeoplePage: React.FC = () => {
     return arr;
   };
   useEffect(() => {
+    setLoading(true);
     const getPeopleData = async () => {
-      setLoading(true);
       try {
-        const response = await apiRequests.getAll(
+        const response = await peopleRequests.getAll(
           debouncing,
           Number(currentPage),
         );
@@ -45,49 +49,37 @@ export const PeoplePage: React.FC = () => {
         setPeopleLength(response?.totalCount);
         setLoading(false);
       } catch (error) {
-        setResponseError(error);
-      } finally {
+        if (error instanceof Error) setResponseError(error.message);
         setLoading(false);
+        throw Error(constants.ERRO_CARREGAMENTO);
       }
     };
     getPeopleData();
   }, [currentPage, debouncing, deleted]);
 
   useEffect(() => {
-    if (peopleLength != undefined) {
-      return setNumOfPages(Math.ceil(peopleLength / constants.MAX_LINHAS));
-    }
+    return setNumOfPages(
+      Math.ceil((peopleLength as number) / constants.MAX_LINHAS),
+    );
   }, [peopleLength]);
 
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full">
       <ContainerGeneric>
-        <div className="w-full h-10">
-          <input
-            value={peopleName || ''}
-            placeholder="Pesquise algum nome aqui"
-            type="search"
-            className="focus:border-2 focus:border-amber-400 w-full p-2 bg-slate-100 dark:bg-neutral-700 border dark:border-white border-slate-500  rounded-md h-full outline-0 md:w-lg
-            dark:placeholder:text-gray-300 placeholder:text-gray-500"
-            onChange={(e) => {
-              setSearchParams((prev) => {
-                prev.set('nome', e.target.value.trimStart());
-                prev.set('pagina', '1');
+        <SearchInput
+          value={peopleName as string}
+          onChangeLogic={(e: string) =>
+            setSearchParams(
+              (prev) => {
+                prev.set('nome', e || ''), prev.set('pagina', '1');
                 return prev;
-              });
-            }}
-          />
-        </div>
+              },
+              { replace: true },
+            )
+          }
+        />
         <div>
-          <Link to="/nova-pessoa">
-            <button
-              className={`hidden lg:flex bg-zinc-800 hover:text-amber-300 dark:bg-white border border-slate-300
-             md:flex items-center justify-center px-4 py-2 rounded-md
-          cursor-pointer dark:text-neutral-800 text-white text-xl font-bold`}
-            >
-              NEW
-            </button>
-          </Link>
+          <NewButton whereTo="/nova-pessoa" text="NOVO" />
         </div>
       </ContainerGeneric>
       <div className="dark:bg-neutral-800  border rounded-md px-0 md:px-4 py-2.5 border-slate-400">
@@ -104,15 +96,11 @@ export const PeoplePage: React.FC = () => {
                 Email
               </th>
             </tr>
-            {loading && (
-              <tr className="flex items-center justify-center mt-4 mb-4">
-                <td className="w-full bg-amber-300 animate-pulse h-2.5 rounded-md border border-slate-500 dark:border-slate-400"></td>
-              </tr>
-            )}
+          </thead>
+          <tbody className="first:bg-amber-300">
+            {loading && <LoadComponent />}
             {responseError ? (
-              <tr>
-                <td className="py-4">{constants.ERRO_CARREGAMENTO}</td>
-              </tr>
+              <IssueMessage message={constants.ERRO_CARREGAMENTO} />
             ) : (
               !loading &&
               peopleData?.map((el, index) => (
@@ -127,7 +115,7 @@ export const PeoplePage: React.FC = () => {
                     <MdDelete
                       className="cursor-pointer"
                       onClick={() => {
-                        apiRequests.deleteById(el.id);
+                        peopleRequests.deleteById(el.id);
                         setDeleted(el.id);
                         if (peopleLength != undefined) {
                           if (Math.ceil((peopleLength - 1) / 7) < currentPage) {
@@ -149,16 +137,13 @@ export const PeoplePage: React.FC = () => {
               ))
             )}
             {!loading && peopleData?.length == 0 && !responseError && (
-              <tr>
-                <td className="py-4">{NENHUM_RESULTADO(peopleName || '')}</td>
-              </tr>
+              <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />
             )}
-          </thead>
-          <tbody className="first:bg-amber-300"></tbody>
+          </tbody>
         </table>
         {!loading && !responseError && (
           <div
-            className={`${numOfPages != undefined && numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
+            className={`${(numOfPages as number) && numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
           >
             <Pagination
               currentPage={currentPage}

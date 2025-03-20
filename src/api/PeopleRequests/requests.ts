@@ -1,10 +1,10 @@
 import constants from '../../shared/facilities';
 import { TPeopleData } from '../../shared/types/PeopleData';
 
-export const apiRequests = {
+export const peopleRequests = {
   async postNewUser(name: string, email: string, city: string) {
     try {
-      const postMethod = await fetch(constants.API_URL, {
+      const postMethod = await fetch(constants.API_PEOPLE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, email: email, cidade: city }),
@@ -17,7 +17,7 @@ export const apiRequests = {
   async getAll(name?: string, page = 1) {
     try {
       const getPeopleData = await fetch(
-        `${constants.API_URL}?nome_like=${name || ''}&_page=${page}&_limit=${constants.MAX_LINHAS}`,
+        `${constants.API_PEOPLE_URL}?nome_like=${name || ''}&_page=${page}&_limit=${constants.MAX_LINHAS}`,
       );
       const peopleDataJson: TPeopleData = await getPeopleData.json();
       const peopleLength = Number(
@@ -36,7 +36,9 @@ export const apiRequests = {
   },
   async getByName(name: string) {
     try {
-      const fetchPerson = await fetch(`${constants.API_URL}?nome=${name}`);
+      const fetchPerson = await fetch(
+        `${constants.API_PEOPLE_URL}?nome=${name}`,
+      );
       const fetchPersonJson = fetchPerson.json();
       return fetchPersonJson;
     } catch (error) {
@@ -45,7 +47,7 @@ export const apiRequests = {
   },
   async updateByID(id: number, name: string, email: string, city?: string) {
     try {
-      const updateMethod = await fetch(`${constants.API_URL}/${id}`, {
+      const updateMethod = await fetch(`${constants.API_PEOPLE_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, email: email, cidade: city }),
@@ -57,7 +59,7 @@ export const apiRequests = {
   },
   async deleteById(id: number) {
     try {
-      const deleteMethod = await fetch(`${constants.API_URL}/${id}`, {
+      const deleteMethod = await fetch(`${constants.API_PEOPLE_URL}/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

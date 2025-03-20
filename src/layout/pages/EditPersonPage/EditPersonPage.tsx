@@ -3,22 +3,23 @@ import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { HeaderPage } from '../../../shared/components/HeaderPage/HeaderPage';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 import { Input } from '../../../shared/components/Input/Input';
 import { FormContainer } from '../../../shared/components/FormContainer/FormContainer';
 import constants from '../../../shared/facilities';
 import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
 import { validationSchema } from '../NewPersonCadaster/SchemaValidation';
-import { apiRequests } from '../../../api/Requests/requests';
+import { peopleRequests } from '../../../api/PeopleRequests/requests';
 import { TPeopleData } from '../../../shared/types/PeopleData';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
+  const navigate = useNavigate();
   const { nome } = useParams();
   const [personData, setPersonData] = useState<TPeopleData>();
   useEffect(() => {
     const getPersonByName = async () => {
-      const person: TPeopleData = await apiRequests.getByName(nome || '');
+      const person: TPeopleData = await peopleRequests.getByName(nome || '');
       setPersonData(person);
     };
     getPersonByName();
@@ -48,14 +49,12 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
             <Formik
               key={id}
               initialValues={{ name: nome, email: email, city: cidade }}
-              onSubmit={async (values) =>
-                await apiRequests.updateByID(
-                  id,
-                  values.name,
-                  values.email,
-                  values.city,
-                )
-              }
+              onSubmit={async ({ name, email, city }) => {
+                return (
+                  await peopleRequests.updateByID(id, name, email, city),
+                  navigate(`/editar/${name}`)
+                );
+              }}
               validationSchema={validationSchema}
             >
               <Form>

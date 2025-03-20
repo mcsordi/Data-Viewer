@@ -13,7 +13,7 @@ export const LoopPages: React.FC<TLoopPages> = ({
 }) => {
   return (
     <>
-      {loopPagination.map((el, idx) => {
+      {loopPagination?.map((el, idx) => {
         return (
           <div
             className={`${idx + 1 === currentPage && 'bg-amber-300 text-white rounded-md px-2 dark:text-neutral-800'} px-1 cursor-pointer text-2xl`}

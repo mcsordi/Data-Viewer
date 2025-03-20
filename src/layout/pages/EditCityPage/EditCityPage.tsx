@@ -4,10 +4,10 @@ import { EditComponent } from '../../../shared/components/EditComponent/EditComp
 import { HeaderPage } from '../../../shared/components/HeaderPage/HeaderPage';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 
-export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
+export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   return (
     <div className="w-full h-screen">
-      <HeaderPage text="Nova Cidade" />
+      <HeaderPage text="Editar Cidade" />
       <ContainerGeneric>
         {editIcons.map((icon, index) => {
           return (

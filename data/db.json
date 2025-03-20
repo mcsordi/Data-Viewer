@@ -1,20 +1,22 @@
 {
   "pessoas": [
     {
-      "nome": "Carla Menezes",
+      "nome": "Carla Tulipa",
       "email": "carlinha@example.com",
-      "cidade": "Rolandia",
+      "cidade": "Campo Grande",
       "id": 3
     },
     {
-      "id": 4,
       "nome": "Diego Ferreira",
-      "email": "diego.ferreira@example.com"
+      "email": "diego.ferreira@example.com",
+      "cidade": "Toledo",
+      "id": 4
     },
     {
-      "id": 5,
-      "nome": "Elisa Rocha",
-      "email": "elisa.rocha@example.com"
+      "nome": "Elisa Sanches",
+      "email": "elisa.sanches@example.com",
+      "cidade": "Rolandia",
+      "id": 5
     },
     {
       "id": 6,
@@ -87,9 +89,9 @@
       "email": "thiago.moreira@example.com"
     },
     {
-      "nome": "Beiçola",
-      "email": "beicola@gmail.com",
-      "cidade": "Rolandia",
+      "nome": "Carlos Alberto",
+      "email": "carlos@gmail.com",
+      "cidade": "Maringa",
       "id": 21
     },
     {
@@ -97,6 +99,60 @@
       "email": "ariana@gmail.com",
       "cidade": "Londrina",
       "id": 22
+    },
+    {
+      "nome": "Luiz Botelho",
+      "email": "botelho@gmail.com",
+      "cidade": "Luiziania",
+      "id": 23
+    },
+    {
+      "nome": "Felipe Franco",
+      "email": "felipe@gmail.com",
+      "cidade": "São Paulo",
+      "id": 24
+    }
+  ],
+  "cidades": [
+    {
+      "id": 1,
+      "nome": "Toledo",
+      "estado": "PR"
+    },
+    {
+      "id": 2,
+      "nome": "Campo Mourão",
+      "estado": "PR"
+    },
+    {
+      "id": 3,
+      "nome": "Maringá",
+      "estado": "PR"
+    },
+    {
+      "id": 4,
+      "nome": "Sorocaba",
+      "estado": "SP"
+    },
+    {
+      "id": 5,
+      "nome": "Barretos",
+      "estado": "SP"
+    },
+    {
+      "id": 6,
+      "nome": "Itupeva",
+      "estado": "SP"
+    },
+    {
+      "id": 7,
+      "nome": "Gramado",
+      "estado": "RS"
+    },
+    {
+      "id": 8,
+      "nome": "Londrina",
+      "estado": "PR"
     }
   ]
 }

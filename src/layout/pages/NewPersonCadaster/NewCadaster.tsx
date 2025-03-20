@@ -4,14 +4,16 @@ import { EditComponent } from '../../../shared/components/EditComponent/EditComp
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 import { Form, Formik } from 'formik';
 import { Input } from '../../../shared/components/Input/Input';
-import { apiRequests } from '../../../api/Requests/requests';
+import { peopleRequests } from '../../../api/PeopleRequests/requests';
 import { validationSchema } from './SchemaValidation';
 import { HeaderPage } from '../../../shared/components/HeaderPage/HeaderPage';
 import { FormContainer } from '../../../shared/components/FormContainer/FormContainer';
 import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
 import constants from '../../../shared/facilities';
+import { useNavigate } from 'react-router-dom';
 
 export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-screen dark:text-white">
       <HeaderPage text="Novo Cadastro" />
@@ -39,7 +41,8 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
           initialValues={{ name: '', email: '', city: '' }}
           validationSchema={validationSchema}
           onSubmit={async ({ name, email, city }, { resetForm }) => {
-            await apiRequests.postNewUser(name, email, city);
+            await peopleRequests.postNewUser(name, email, city);
+            navigate(`/editar/${name}`);
             resetForm({ values: { name: '', city: '', email: '' } });
           }}
         >

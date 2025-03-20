@@ -13,6 +13,8 @@ import { CityPage } from '../../layout/pages/CityPage/CityPage';
 import { PeoplePage } from '../../layout/pages/PeoplePage/PeoplePage';
 import { NewPersonCadaster } from '../../layout/pages/NewPersonCadaster/NewCadaster';
 import { EditPersonPage } from '../../layout/pages/EditPersonPage/EditPersonPage';
+import { NewCityCadaster } from '../../layout/pages/NewCityCadaster/NewCityCadaster';
+import { EditCityPage } from '../../layout/pages/EditCityPage/EditCityPage';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
@@ -52,15 +54,23 @@ export const RouterBrowser: React.FC = () => {
       <Routes>
         <Route path="/" element={<CommonPage navigation={navigate} />}>
           <Route index element={<HomePage />} />
-          <Route path="/cidades" element={<CityPage editIcons={editIcons} />} />
+          <Route path="/cidades" element={<CityPage />} />
           <Route path="/pessoas" element={<PeoplePage />} />
           <Route
             path="/nova-pessoa"
             element={<NewPersonCadaster editIcons={editIcons} />}
           />
           <Route
+            path="/nova-cidade"
+            element={<NewCityCadaster editIcons={editIcons} />}
+          />
+          <Route
             path="/editar/:nome"
             element={<EditPersonPage editIcons={editIcons} />}
+          />
+          <Route
+            path="/editar/cidade/"
+            element={<EditCityPage editIcons={editIcons} />}
           />
           <Route path={'/*'} element={<Navigate to="/" />} />
         </Route>
