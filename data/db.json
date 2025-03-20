@@ -116,43 +116,48 @@
   "cidades": [
     {
       "id": 1,
-      "nome": "Toledo",
-      "estado": "PR"
+      "nome": "São Paulo",
+      "estado": "SP"
     },
     {
       "id": 2,
-      "nome": "Campo Mourão",
-      "estado": "PR"
+      "nome": "Rio de Janeiro",
+      "estado": "RJ"
     },
     {
       "id": 3,
-      "nome": "Maringá",
-      "estado": "PR"
+      "nome": "Belo Horizonte",
+      "estado": "MG"
     },
     {
       "id": 4,
-      "nome": "Sorocaba",
-      "estado": "SP"
+      "nome": "Curitiba",
+      "estado": "PR"
     },
     {
       "id": 5,
-      "nome": "Barretos",
-      "estado": "SP"
+      "nome": "Salvador",
+      "estado": "BA"
     },
     {
       "id": 6,
-      "nome": "Itupeva",
-      "estado": "SP"
+      "nome": "Recife",
+      "estado": "PE"
     },
     {
       "id": 7,
-      "nome": "Gramado",
+      "nome": "Porto Alegre",
       "estado": "RS"
     },
     {
       "id": 8,
-      "nome": "Londrina",
-      "estado": "PR"
+      "nome": "Fortaleza",
+      "estado": "CE"
+    },
+    {
+      "id": 9,
+      "nome": "Manaus",
+      "estado": "AM"
     }
   ]
 }

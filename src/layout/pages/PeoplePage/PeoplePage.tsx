@@ -143,7 +143,7 @@ export const PeoplePage: React.FC = () => {
         </table>
         {!loading && !responseError && (
           <div
-            className={`${(numOfPages as number) && numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
+            className={`${numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
           >
             <Pagination
               currentPage={currentPage}

@@ -24,13 +24,14 @@ export const CityPage: React.FC = () => {
   const cityPage = searchParams.get('pagina');
   const totalPages = Math.ceil((cityCount as number) / constants.MAX_LINHAS);
   const debounce = useDebounce(cityName ? cityName : '');
+  const lessOnePage = Math.ceil(((cityCount as number) - 1) / 7);
+  const [deleted, setDeleted] = useState<number>();
   const loopPages = () => {
     const citiesArr = [];
-    if (totalPages != undefined) {
-      for (let i = 1; i <= totalPages; i++) {
-        citiesArr.push(i);
-      }
+    for (let i = 1; i <= totalPages; i++) {
+      citiesArr.push(i);
     }
+
     return citiesArr;
   };
   useEffect(() => {
@@ -52,7 +53,7 @@ export const CityPage: React.FC = () => {
       }
     };
     getCities();
-  }, [debounce, cityPage]);
+  }, [debounce, cityPage, deleted]);
 
   return (
     <div className={`dark:text-white flex w-full flex-col`}>
@@ -97,17 +98,27 @@ export const CityPage: React.FC = () => {
             )}
             {}
             {!loading &&
+              !fetchError &&
               cities?.map(({ nome, estado, id }) => {
                 return (
                   <tr
                     key={id}
-                    className="w-full flex justify-start odd:bg-gray-100 dark:odd:bg-neutral-900"
+                    className="w-full flex justify-start odd:bg-gray-100 dark:odd:bg-neutral-900 hover:bg-amber-300 dark:hover:bg-amber-300 dark:hover:text-black"
                   >
                     <td className="w-full flex text-xl gap-3 px-4 py-2">
                       <Link to={'/editar/cidade'}>
                         <MdEdit className="cursor-pointer" />
                       </Link>
-                      <MdDelete className="cursor-pointer" />
+                      <MdDelete
+                        className="cursor-pointer"
+                        onClick={() => {
+                          cityRequests.deleteById(id), setDeleted(id);
+                          setSearchParams((prev) => {
+                            prev.set('pagina', lessOnePage.toString());
+                            return prev;
+                          });
+                        }}
+                      />
                     </td>
                     <td className="w-full px-4 py-2">{nome}</td>
                     <td className="w-full px-4 py-2">{estado}</td>
@@ -116,7 +127,9 @@ export const CityPage: React.FC = () => {
               })}
           </tbody>
         </table>
-        <div className="w-full flex items-baseline justify-center p-2 pt-4">
+        <div
+          className={`${fetchError && 'hidden'} ${loading && 'hidden'} ${totalPages < 1 && 'hidden'} w-full flex items-baseline justify-center p-2 pt-4`}
+        >
           <Pagination
             currentPage={Number(cityPage)}
             numOfPages={totalPages}
