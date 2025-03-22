@@ -105,7 +105,7 @@ export const PeoplePage: React.FC = () => {
               !loading &&
               peopleData?.map((el, index) => (
                 <tr
-                  className="w-full truncate items-start flex justify-between odd:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800"
+                  className="w-full hover:bg-amber-300 truncate items-start flex justify-between odd:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800"
                   key={index}
                 >
                   <td className="w-full py-2 pl-4 flex gap-3 text-xl">
@@ -136,9 +136,12 @@ export const PeoplePage: React.FC = () => {
                 </tr>
               ))
             )}
-            {!loading && peopleData?.length == 0 && !responseError && (
-              <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />
-            )}
+            {!loading &&
+              peopleData?.length == 0 &&
+              !responseError &&
+              peopleName != '' && (
+                <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />
+              )}
           </tbody>
         </table>
         {!loading && !responseError && (

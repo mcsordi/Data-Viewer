@@ -2,6 +2,7 @@ const constants = {
   API_PEOPLE_URL: 'http://localhost:8000/pessoas',
   API_CITY_URL: 'http://localhost:8000/cidades',
   MAX_LINHAS: 7,
+  LISTA_VAZIA: 'Sua lista está vazia',
   ERRO_CARREGAMENTO: 'Falha ao carregar listagem',
   ERRO_EDITAR: 'Falha ao editar listagem',
   ERRO_DELETAR: 'Falha ao deletar item',

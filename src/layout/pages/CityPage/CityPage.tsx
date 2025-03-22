@@ -90,7 +90,7 @@ export const CityPage: React.FC = () => {
           </thead>
           <tbody>
             {loading && <LoadComponent />}
-            {(cityCount as number) < 1 && (
+            {(cityCount as number) < 1 && cityName != '' && (
               <IssueMessage message={NENHUM_RESULTADO(cityName as string)} />
             )}
             {fetchError && (
@@ -106,7 +106,7 @@ export const CityPage: React.FC = () => {
                     className="w-full flex justify-start odd:bg-gray-100 dark:odd:bg-neutral-900 hover:bg-amber-300 dark:hover:bg-amber-300 dark:hover:text-black"
                   >
                     <td className="w-full flex text-xl gap-3 px-4 py-2">
-                      <Link to={'/editar/cidade'}>
+                      <Link to={`/editar/cidade/${nome}`}>
                         <MdEdit className="cursor-pointer" />
                       </Link>
                       <MdDelete

@@ -69,7 +69,7 @@ export const RouterBrowser: React.FC = () => {
             element={<EditPersonPage editIcons={editIcons} />}
           />
           <Route
-            path="/editar/cidade/"
+            path="/editar/cidade/:cidade"
             element={<EditCityPage editIcons={editIcons} />}
           />
           <Route path={'/*'} element={<Navigate to="/" />} />
