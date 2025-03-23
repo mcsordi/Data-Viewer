@@ -12,11 +12,15 @@ import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButt
 import { validationSchema } from '../NewPersonCadaster/SchemaValidation';
 import { peopleRequests } from '../../../api/PeopleRequests/requests';
 import { TPeopleData } from '../../../shared/types/PeopleData';
+import { SelectField } from '../../../shared/components/SelectField/SelectField';
+import { TCity } from '../../../shared/types/Cities';
+import { cityRequests } from '../../../api/CityRequests/request';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   const { nome } = useParams();
   const [personData, setPersonData] = useState<TPeopleData>();
+  const [cities, setCities] = useState<TCity>();
   useEffect(() => {
     const getPersonByName = async () => {
       const person: TPeopleData = await peopleRequests.getByName(nome || '');
@@ -24,6 +28,18 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
     };
     getPersonByName();
   }, [nome]);
+
+  useEffect(() => {
+    const allCities = async () => {
+      try {
+        const wholeCities = await cityRequests.getAllOfTheCities();
+        setCities(wholeCities);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    allCities();
+  }, []);
 
   return (
     <div className="w-full h-screen dark:text-white">
@@ -72,12 +88,12 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                   placeholder={constants.EMAIL_EXEMPLO}
                   type="email"
                 />
-                <Input
+                <SelectField
+                  FirstValue="Selecionar"
+                  label="Cidades"
                   id="city"
-                  label="Cidade"
                   name="city"
-                  placeholder={constants.CIDADE_EXEMPLO}
-                  type="text"
+                  cities={cities as TCity}
                 />
                 <SubmitButton text="Editar" />
               </Form>

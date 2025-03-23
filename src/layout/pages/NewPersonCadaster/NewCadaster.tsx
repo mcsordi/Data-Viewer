@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
@@ -11,9 +11,25 @@ import { FormContainer } from '../../../shared/components/FormContainer/FormCont
 import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
 import constants from '../../../shared/facilities';
 import { useNavigate } from 'react-router-dom';
+import { SelectField } from '../../../shared/components/SelectField/SelectField';
+import { TCity } from '../../../shared/types/Cities';
+import { cityRequests } from '../../../api/CityRequests/request';
 
 export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
+  const [city, setCity] = useState<TCity>();
+
+  useEffect(() => {
+    try {
+      const getCities = async () => {
+        const wholeCities = await cityRequests.getAllOfTheCities();
+        setCity(wholeCities);
+      };
+      getCities();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
     <div className="w-full h-screen dark:text-white">
       <HeaderPage text="Novo Cadastro" />
@@ -38,7 +54,7 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
       </ContainerGeneric>
       <FormContainer>
         <Formik
-          initialValues={{ name: '', email: '', city: '' }}
+          initialValues={{ name: '', email: '', city: 'Selecionar' }}
           validationSchema={validationSchema}
           onSubmit={async ({ name, email, city }, { resetForm }) => {
             await peopleRequests.postNewUser(name, email, city);
@@ -61,13 +77,13 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
               placeholder={constants.EMAIL_EXEMPLO}
               type="email"
             />
-            <Input
-              name="city"
+            <SelectField
+              cities={city as TCity}
               id="city"
-              label="Cidade"
-              placeholder={constants.CIDADE_EXEMPLO}
-              type="text"
-            />
+              label="Cidades"
+              name="city"
+              FirstValue="Selecionar"
+            ></SelectField>
             <SubmitButton text="Enviar" />
           </Form>
         </Formik>

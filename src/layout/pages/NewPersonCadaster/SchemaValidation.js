@@ -8,5 +8,8 @@ export const validationSchema = yup.object().shape({
     .string()
     .email('Email precisa ser valido')
     .required('Campo requerido'),
-  city: yup.string().required('Campo requerido'),
+  city: yup
+    .string()
+    .required()
+    .notOneOf(['Selecionar'], 'Campo não pode ser Selecionar'),
 });

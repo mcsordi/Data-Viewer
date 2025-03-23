@@ -1,5 +1,5 @@
-import { TCity } from '../../layout/pages/EditCityPage/EditCityPage';
 import constants from '../../shared/facilities';
+import { TCity } from '../../shared/types/Cities';
 export type TCitiesReques = {
   nome: string;
   totalCount: number;
@@ -22,6 +22,16 @@ export const cityRequests = {
       throw Error(constants.ERRO_CARREGAMENTO);
     }
   },
+  async getAllOfTheCities() {
+    try {
+      const cities = await fetch(constants.API_CITY_URL);
+      const citiesJson: TCity = await cities.json();
+      return citiesJson;
+    } catch (error) {
+      throw Error(constants.ERRO_CARREGAMENTO);
+    }
+  },
+
   async getCityByName(city: string) {
     try {
       const fetchNameCity = await fetch(
@@ -54,6 +64,18 @@ export const cityRequests = {
       return methodUptade;
     } catch (error) {
       throw Error(constants.ERRO_EDITAR);
+    }
+  },
+  async postNewCity(name: string, state: string) {
+    try {
+      const methodUptade = await fetch(constants.API_CITY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: name, estado: state }),
+      });
+      return methodUptade;
+    } catch (error) {
+      throw Error(constants.ERRO_CADASTRAR);
     }
   },
 };

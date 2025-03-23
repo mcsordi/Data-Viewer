@@ -10,12 +10,7 @@ import { cityValidation } from '../NewCityCadaster/CityValidation';
 import { useEffect, useState } from 'react';
 import { cityRequests } from '../../../api/CityRequests/request';
 import { useNavigate, useParams } from 'react-router-dom';
-
-export type TCity = {
-  id: number;
-  nome: string;
-  estado: string;
-}[];
+import { TCity } from '../../../shared/types/Cities';
 
 export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const cityParams = useParams().cidade;
@@ -70,7 +65,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                   type="text"
                 />
                 <Input
-                  label="State"
+                  label="Estado"
                   placeholder="SP"
                   id="state"
                   name="state"
