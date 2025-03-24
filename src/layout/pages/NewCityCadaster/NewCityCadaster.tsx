@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-screen">
-      <HeaderPage text="Nova Cidade" />
+    <div className="w-full h-screen dark:text-white">
+      <HeaderPage text="Cadastrar Cidade" />
       <ContainerGeneric>
         {editIcons.map((icon, index) => {
           return (

@@ -11,7 +11,10 @@ export const peopleRequests = {
       });
       return postMethod;
     } catch (error) {
-      throw Error(constants.ERRO_CADASTRAR);
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Erro desconhecido';
     }
   },
   async getAll(name?: string, page = 1) {
@@ -29,12 +32,23 @@ export const peopleRequests = {
       };
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(error);
-        throw Error(constants.ERRO_CARREGAMENTO);
+        return error.message;
       }
+      return 'Erro desconhecido';
     }
   },
-  async getByName(name: string) {
+  async getAllOfThePeople(): Promise<TPeopleData | string> {
+    try {
+      const fetchPeople = await fetch(`${constants.API_PEOPLE_URL}`);
+      const peoplesonJson: Promise<TPeopleData> = fetchPeople.json();
+      return peoplesonJson;
+    } catch (error) {
+      if (error instanceof Error) return error.message;
+    }
+    return 'Erro desconhecido';
+  },
+
+  async getByName(name: string): Promise<TPeopleData | string> {
     try {
       const fetchPerson = await fetch(
         `${constants.API_PEOPLE_URL}?nome=${name}`,
@@ -42,7 +56,10 @@ export const peopleRequests = {
       const fetchPersonJson = fetchPerson.json();
       return fetchPersonJson;
     } catch (error) {
-      throw Error(constants.ERRO_CARREGAMENTO);
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Erro desconhecido';
     }
   },
   async updateByID(id: number, name: string, email: string, city?: string) {
@@ -54,7 +71,10 @@ export const peopleRequests = {
       });
       return updateMethod;
     } catch (error) {
-      throw Error(constants.ERRO_EDITAR);
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return 'Erro desconhecido';
     }
   },
   async deleteById(id: number) {
@@ -68,7 +88,10 @@ export const peopleRequests = {
       return deleteMethod;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw Error(constants.ERRO_DELETAR);
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return 'Erro desconhecido';
       }
     }
   },

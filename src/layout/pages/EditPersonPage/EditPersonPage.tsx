@@ -15,92 +15,114 @@ import { TPeopleData } from '../../../shared/types/PeopleData';
 import { SelectField } from '../../../shared/components/SelectField/SelectField';
 import { TCity } from '../../../shared/types/Cities';
 import { cityRequests } from '../../../api/CityRequests/request';
+import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
+// import { cityRequests } from '../../../api/CityRequests/request';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   const { nome } = useParams();
   const [personData, setPersonData] = useState<TPeopleData>();
-  const [cities, setCities] = useState<TCity>();
+  const [cityData, setCityData] = useState<TCity>();
+  const [personError, setPersonError] = useState<string>();
+  const [cityError, setCityError] = useState<string>();
+  const [loading, setLoading] = useState<boolean>();
   useEffect(() => {
     const getPersonByName = async () => {
-      const person: TPeopleData = await peopleRequests.getByName(nome || '');
-      setPersonData(person);
+      setLoading(true);
+      const person = await peopleRequests.getByName(nome || '');
+      if (typeof person == 'object') {
+        setPersonData(person);
+      } else {
+        setPersonError(person);
+      }
+      setLoading(false);
     };
     getPersonByName();
   }, [nome]);
 
   useEffect(() => {
-    const allCities = async () => {
-      try {
-        const wholeCities = await cityRequests.getAllOfTheCities();
-        setCities(wholeCities);
-      } catch (error) {
-        console.log(error);
+    const getCities = async () => {
+      setLoading(true);
+
+      const fetch = await cityRequests.getAllOfTheCities();
+      if (typeof fetch == 'object') {
+        setCityData(fetch);
+      } else {
+        setCityError(fetch);
       }
+      setLoading(false);
     };
-    allCities();
+    getCities();
   }, []);
 
   return (
     <div className="w-full h-screen dark:text-white">
       <HeaderPage text={nome || ''} />
       <ContainerGeneric>
-        {editIcons.map((icon, index) => (
-          <EditComponent
-            icon={icon.icon}
-            itsButton={icon.itsButton}
-            textIcon={icon.textIcon}
-            key={index}
-            whereToNav={
-              icon.textIcon == 'Pesquisar' || icon.textIcon == 'Voltar'
-                ? '/pessoas'
-                : ''
-            }
-          />
-        ))}
+        {loading ? (
+          <Skeleton />
+        ) : (
+          editIcons.map((icon, index) => (
+            <EditComponent
+              icon={icon.icon}
+              itsButton={icon.itsButton}
+              textIcon={icon.textIcon}
+              key={index}
+              whereToNav={
+                icon.textIcon == 'Pesquisar' || icon.textIcon == 'Voltar'
+                  ? '/pessoas'
+                  : ''
+              }
+            />
+          ))
+        )}
       </ContainerGeneric>
-      <FormContainer>
-        {personData?.map(({ nome, email, cidade, id }) => {
-          return (
-            <Formik
-              key={id}
-              initialValues={{ name: nome, email: email, city: cidade }}
-              onSubmit={async ({ name, email, city }) => {
-                return (
-                  await peopleRequests.updateByID(id, name, email, city),
-                  navigate(`/editar/${name}`)
-                );
-              }}
-              validationSchema={validationSchema}
-            >
-              <Form>
-                <Input
-                  id="name"
-                  label="Nome"
-                  name="name"
-                  placeholder={constants.NOME_EXEMPLO}
-                  type="text"
-                />
-                <Input
-                  id="email"
-                  label="Email"
-                  name="email"
-                  placeholder={constants.EMAIL_EXEMPLO}
-                  type="email"
-                />
-                <SelectField
-                  FirstValue="Selecionar"
-                  label="Cidades"
-                  id="city"
-                  name="city"
-                  cities={cities as TCity}
-                />
-                <SubmitButton text="Editar" />
-              </Form>
-            </Formik>
-          );
-        })}
-      </FormContainer>
+      {personError || cityError ? (
+        <div className="mt-5 text-xl">Ocorreu um erro inesperado</div>
+      ) : (
+        <FormContainer>
+          {personData?.map(({ nome, email, cidade, id }) => {
+            return (
+              <Formik
+                key={id}
+                initialValues={{ name: nome, email: email, city: cidade }}
+                onSubmit={async ({ name, email, city }) => {
+                  return (
+                    await peopleRequests.updateByID(id, name, email, city),
+                    navigate(`/editar/${name}`)
+                  );
+                }}
+                validationSchema={validationSchema}
+              >
+                <Form>
+                  <Input
+                    id="name"
+                    label="Nome"
+                    name="name"
+                    placeholder={constants.NOME_EXEMPLO}
+                    type="text"
+                  />
+                  <Input
+                    id="email"
+                    label="Email"
+                    name="email"
+                    placeholder={constants.EMAIL_EXEMPLO}
+                    type="email"
+                  />
+                  <SelectField
+                    FirstValue="Selecionar"
+                    label="Cidades"
+                    id="city"
+                    name="city"
+                    data={cityData as TCity}
+                  />
+                  <SubmitButton text="Editar" />
+                </Form>
+              </Formik>
+            );
+          })}
+        </FormContainer>
+      )}
     </div>
   );
 };

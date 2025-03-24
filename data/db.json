@@ -49,10 +49,28 @@
       "id": 8
     },
     {
-      "nome": "Bacci",
-      "email": "bacci@gmail.com",
-      "cidade": "Balneário",
-      "id": 9
+      "nome": "Carlos Maia",
+      "email": "maia@gmail.com",
+      "cidade": "Apucarana",
+      "id": 10
+    },
+    {
+      "nome": "Kleber Bambam",
+      "email": "bambam@gmail.com",
+      "cidade": "Apucarana",
+      "id": 11
+    },
+    {
+      "nome": "Silvio Santos",
+      "email": "santos@gmail.com",
+      "cidade": "Santos",
+      "id": 12
+    },
+    {
+      "nome": "Alan Delon",
+      "email": "delon@gmail.com",
+      "cidade": "Jundiai",
+      "id": 13
     }
   ],
   "cidades": [
@@ -110,6 +128,21 @@
       "nome": "Rio de Janeiro",
       "estado": "RJ",
       "id": 11
+    },
+    {
+      "nome": "Apucarana",
+      "estado": "PR",
+      "id": 12
+    },
+    {
+      "nome": "Rolândia",
+      "estado": "PR",
+      "id": 13
+    },
+    {
+      "nome": "Palotina",
+      "estado": "PR",
+      "id": 14
     }
   ]
 }

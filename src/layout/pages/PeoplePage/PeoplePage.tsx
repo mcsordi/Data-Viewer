@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { peopleRequests } from '../../../api/PeopleRequests/requests';
@@ -12,6 +12,7 @@ import { SearchInput } from '../../../shared/components/SearchInput/SearchInput'
 import { NewButton } from '../../../shared/components/NewButton/NewButton';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
+import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 
 export const PeoplePage: React.FC = () => {
   const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
@@ -27,6 +28,7 @@ export const PeoplePage: React.FC = () => {
   const [peopleLength, setPeopleLength] = useState<number | undefined>(0);
   const [numOfPages, setNumOfPages] = useState<number>();
   const [deleted, setDeleted] = useState<number>();
+  const focus = useRef({} as HTMLInputElement);
 
   const loopPagination = () => {
     const arr = [];
@@ -38,21 +40,19 @@ export const PeoplePage: React.FC = () => {
     return arr;
   };
   useEffect(() => {
-    setLoading(true);
     const getPeopleData = async () => {
-      try {
-        const response = await peopleRequests.getAll(
-          debouncing,
-          Number(currentPage),
-        );
+      setLoading(true);
+      const response = await peopleRequests.getAll(
+        debouncing,
+        Number(currentPage),
+      );
+      if (typeof response == 'object') {
         setPeopleData(response?.data);
         setPeopleLength(response?.totalCount);
-        setLoading(false);
-      } catch (error) {
-        if (error instanceof Error) setResponseError(error.message);
-        setLoading(false);
-        throw Error(constants.ERRO_CARREGAMENTO);
+      } else {
+        setResponseError(response);
       }
+      setLoading(false);
     };
     getPeopleData();
   }, [currentPage, debouncing, deleted]);
@@ -66,21 +66,29 @@ export const PeoplePage: React.FC = () => {
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full">
       <ContainerGeneric>
-        <SearchInput
-          value={peopleName as string}
-          onChangeLogic={(e: string) =>
-            setSearchParams(
-              (prev) => {
-                prev.set('nome', e || ''), prev.set('pagina', '1');
-                return prev;
-              },
-              { replace: true },
-            )
-          }
-        />
-        <div>
-          <NewButton whereTo="/nova-pessoa" text="NOVO" />
-        </div>
+        {loading ? (
+          <InputSkeleton />
+        ) : (
+          <>
+            <SearchInput
+              focus={focus}
+              placeholder="Pesquise alguma pessoa aqui"
+              value={peopleName as string}
+              onChangeLogic={(e: string) =>
+                setSearchParams(
+                  (prev) => {
+                    prev.set('nome', e || ''), prev.set('pagina', '1');
+                    return prev;
+                  },
+                  { replace: true },
+                )
+              }
+            />
+            <div>
+              <NewButton whereTo="/nova-pessoa" text="NOVO" />
+            </div>
+          </>
+        )}
       </ContainerGeneric>
       <div className="dark:bg-neutral-800  border rounded-md px-0 md:px-4 py-2.5 border-slate-400">
         <table className="flex flex-col w-full">

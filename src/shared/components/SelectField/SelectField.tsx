@@ -2,20 +2,15 @@ import { useField } from 'formik';
 import React, { useState } from 'react';
 
 type TSelectField = {
-  cities: { nome: string; id: number; estado: string }[];
+  data: { nome: string; id: number; estado: string }[];
   label: string;
   name: string;
   id: string;
   FirstValue: string;
 };
 
-type TCity = {
-  nome: string;
-  id: number;
-  estado: string;
-};
 export const SelectField: React.FC<TSelectField> = ({
-  cities,
+  data,
   label,
   id,
   FirstValue,
@@ -43,14 +38,14 @@ export const SelectField: React.FC<TSelectField> = ({
         <option className="text-gray-400" value={FirstValue}>
           {FirstValue}
         </option>
-        {cities?.map((city: TCity) => {
+        {data?.map(({ nome, id }) => {
           return (
             <option
               className="text-black dark:text-white "
-              value={city.nome}
-              key={city.id}
+              value={nome}
+              key={id}
             >
-              {city.nome}
+              {nome}
             </option>
           );
         })}

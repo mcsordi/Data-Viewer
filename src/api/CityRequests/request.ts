@@ -19,17 +19,19 @@ export const cityRequests = {
       const citiesJson: Promise<TCitiesReques> = getAllCities.json();
       return { totalCount: citiesTotalCount || 0, cities: citiesJson };
     } catch (error) {
-      throw Error(constants.ERRO_CARREGAMENTO);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
-  async getAllOfTheCities() {
+  async getAllOfTheCities(): Promise<TCity | string> {
     try {
-      const cities = await fetch(constants.API_CITY_URL);
-      const citiesJson: TCity = await cities.json();
-      return citiesJson;
+      const allCities = await fetch(constants.API_CITY_URL);
+      const allCitiesJson = await allCities.json();
+      return allCitiesJson;
     } catch (error) {
-      throw Error(constants.ERRO_CARREGAMENTO);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
 
   async getCityByName(city: string) {
@@ -40,8 +42,9 @@ export const cityRequests = {
       const nameCityJson: TCity = await fetchNameCity.json();
       return nameCityJson;
     } catch (error) {
-      throw Error(constants.ERRO_CARREGAMENTO);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
   async deleteById(id: number) {
     try {
@@ -51,8 +54,9 @@ export const cityRequests = {
       });
       return deleteMethod;
     } catch (error) {
-      throw Error(constants.ERRO_DELETAR);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
   async updateCity(id: number, name: string, state: string) {
     try {
@@ -63,8 +67,9 @@ export const cityRequests = {
       });
       return methodUptade;
     } catch (error) {
-      throw Error(constants.ERRO_EDITAR);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
   async postNewCity(name: string, state: string) {
     try {
@@ -75,7 +80,8 @@ export const cityRequests = {
       });
       return methodUptade;
     } catch (error) {
-      throw Error(constants.ERRO_CADASTRAR);
+      if (error instanceof Error) return error.message;
     }
+    return 'Erro desconhecido';
   },
 };

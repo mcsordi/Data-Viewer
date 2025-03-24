@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { cityRequests, TCitiesReques } from '../../../api/CityRequests/request';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -10,6 +10,7 @@ import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
 import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
+import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 
 export const CityPage: React.FC = () => {
   const [cities, setCities] = useState<TCitiesReques>();
@@ -26,6 +27,7 @@ export const CityPage: React.FC = () => {
   const debounce = useDebounce(cityName ? cityName : '');
   const lessOnePage = Math.ceil(((cityCount as number) - 1) / 7);
   const [deleted, setDeleted] = useState<number>();
+  const focus = useRef({} as HTMLInputElement);
   const loopPages = () => {
     const citiesArr = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -37,20 +39,17 @@ export const CityPage: React.FC = () => {
   useEffect(() => {
     const getCities = async () => {
       setLoading(true);
-      try {
-        const request = await cityRequests.getAll(
-          debounce,
-          cityPage ? cityPage : '1',
-        );
+      const request = await cityRequests.getAll(
+        debounce,
+        cityPage ? cityPage : '1',
+      );
+      if (typeof request == 'object') {
         setCities(await request.cities);
         setCityCount(request.totalCount);
-
-        setLoading(false);
-      } catch (error) {
-        if (error instanceof Error) setFetchError(error.message);
-        setLoading(false);
-        throw Error(constants.ERRO_CARREGAMENTO);
+      } else {
+        setFetchError(request);
       }
+      setLoading(false);
     };
     getCities();
   }, [debounce, cityPage, deleted]);
@@ -58,20 +57,28 @@ export const CityPage: React.FC = () => {
   return (
     <div className={`dark:text-white flex w-full flex-col`}>
       <ContainerGeneric>
-        <SearchInput
-          value={cityName || ''}
-          onChangeLogic={(e) => {
-            setSearchParams(
-              (prev) => {
-                prev.set('cidade', e);
-                prev.set('pagina', '1');
-                return prev;
-              },
-              { replace: true },
-            );
-          }}
-        />
-        <NewButton whereTo="/nova-cidade" text="NOVA" />
+        {loading ? (
+          <InputSkeleton />
+        ) : (
+          <>
+            <SearchInput
+              focus={focus}
+              placeholder="Pesquise alguma cidade aqui"
+              value={cityName || ''}
+              onChangeLogic={(e) => {
+                setSearchParams(
+                  (prev) => {
+                    prev.set('cidade', e);
+                    prev.set('pagina', '1');
+                    return prev;
+                  },
+                  { replace: true },
+                );
+              }}
+            />
+            <NewButton whereTo="/nova-cidade" text="NOVA" />
+          </>
+        )}
       </ContainerGeneric>
       <div className="dark:bg-neutral-800  border rounded-md px-0 md:px-4 py-2.5 mt-3 border-slate-400">
         <table className="w-full">
