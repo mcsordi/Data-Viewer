@@ -31,7 +31,7 @@ export const SelectField: React.FC<TSelectField> = ({
         {...field}
         {...props}
         id={id}
-        className={`${meta.value == 'Selecionar' && 'text-gray-400 border-black dark:border-white'} w-sm border py-2 px-1.5 h-9 rounded-sm outline-none mt-2.5 dark:bg-neutral-900`}
+        className={`${meta.value == 'Selecionar' && 'text-gray-400 border-black dark:border-white'} w-full xs:w-sm border py-2 px-1.5 h-9 rounded-sm outline-none mt-2.5 dark:bg-neutral-900`}
         onFocus={(e) => setFocus(e.target.value)}
         onBlur={() => setFocus('')}
       >

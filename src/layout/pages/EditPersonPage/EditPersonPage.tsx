@@ -16,7 +16,6 @@ import { SelectField } from '../../../shared/components/SelectField/SelectField'
 import { TCity } from '../../../shared/types/Cities';
 import { cityRequests } from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
-// import { cityRequests } from '../../../api/CityRequests/request';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
@@ -56,7 +55,7 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   }, []);
 
   return (
-    <div className="w-full h-screen dark:text-white">
+    <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text={nome || ''} />
       <ContainerGeneric>
         {loading ? (
@@ -69,9 +68,7 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
               textIcon={icon.textIcon}
               key={index}
               whereToNav={
-                icon.textIcon == 'Pesquisar' || icon.textIcon == 'Voltar'
-                  ? '/pessoas'
-                  : ''
+                (icon.textIcon == 'Voltar' && '/pessoas') || icon.whereToNav
               }
             />
           ))

@@ -36,28 +36,30 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   }, []);
 
   return (
-    <div className="w-full h-screen dark:text-white">
+    <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text="Cadastrar Pessoa" />
       <ContainerGeneric>
         {loading ? (
           <Skeleton />
         ) : (
           editIcons.map((icon, index) => {
-            return (
-              <EditComponent
-                key={index}
-                icon={icon.icon}
-                theresClass={icon.theresClass}
-                itsButton={icon.itsButton}
-                textClass={icon.textClass}
-                textIcon={icon.textIcon}
-                whereToNav={
-                  icon.textIcon == 'Voltar' || icon.textIcon == 'Pesquisar'
-                    ? '/pessoas'
-                    : ''
-                }
-              />
-            );
+            {
+              return icon.textIcon == 'Cadastrar Pessoa' ? (
+                ''
+              ) : (
+                <EditComponent
+                  key={index}
+                  icon={icon.icon}
+                  theresClass={icon.theresClass}
+                  itsButton={icon.itsButton}
+                  textClass={icon.textClass}
+                  textIcon={icon.textIcon}
+                  whereToNav={
+                    (icon.textIcon == 'Voltar' && '/pessoas') || icon.whereToNav
+                  }
+                />
+              );
+            }
           })
         )}
       </ContainerGeneric>

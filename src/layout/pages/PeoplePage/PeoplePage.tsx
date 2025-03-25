@@ -64,7 +64,7 @@ export const PeoplePage: React.FC = () => {
   }, [peopleLength]);
 
   return (
-    <div className="dark:text-white flex flex-col gap-3 w-full">
+    <div className="dark:text-white flex flex-col gap-3 w-full px-0.5 xs:px-0">
       <ContainerGeneric>
         {loading ? (
           <InputSkeleton />
@@ -90,7 +90,7 @@ export const PeoplePage: React.FC = () => {
           </>
         )}
       </ContainerGeneric>
-      <div className="dark:bg-neutral-800  border rounded-md px-0 md:px-4 py-2.5 border-slate-400">
+      <div className="dark:bg-neutral-800 border rounded-md px-0 md:px-4 py-2.5 border-slate-400">
         <table className="flex flex-col w-full">
           <thead>
             <tr className="flex  w-full truncate">
@@ -139,8 +139,8 @@ export const PeoplePage: React.FC = () => {
                       }}
                     />
                   </td>
-                  <td className="w-full py-2 pl-4">{el.nome}</td>
-                  <td className="w-full py-2 pl-4">{el.email}</td>
+                  <td className="truncate w-full py-2 pl-4">{el.nome}</td>
+                  <td className="w-full truncate py-2 pl-4">{el.email}</td>
                 </tr>
               ))
             )}

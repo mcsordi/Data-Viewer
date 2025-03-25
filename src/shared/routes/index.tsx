@@ -4,23 +4,29 @@ import { FaHome } from 'react-icons/fa';
 import { BsBuildingsFill } from 'react-icons/bs';
 import { IoPeopleSharp } from 'react-icons/io5';
 import { HomePage } from '../../layout/pages/HomePage/HomePage';
-import { FaSearch } from 'react-icons/fa';
-import { FaSave } from 'react-icons/fa';
 import { IoArrowBackOutline } from 'react-icons/io5';
 import { RxDividerVertical } from 'react-icons/rx';
-import { MdEdit } from 'react-icons/md';
 import { CityPage } from '../../layout/pages/CityPage/CityPage';
 import { PeoplePage } from '../../layout/pages/PeoplePage/PeoplePage';
 import { NewPersonCadaster } from '../../layout/pages/NewPersonCadaster/NewCadaster';
 import { EditPersonPage } from '../../layout/pages/EditPersonPage/EditPersonPage';
 import { NewCityCadaster } from '../../layout/pages/NewCityCadaster/NewCityCadaster';
 import { EditCityPage } from '../../layout/pages/EditCityPage/EditCityPage';
+import { PiBuildingApartmentFill } from 'react-icons/pi';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
-    { icon: <FaSearch />, textIcon: 'Pesquisar' },
-    { icon: <FaSave />, textIcon: 'Salvar' },
-    { icon: <MdEdit />, textIcon: 'Editar' },
+    { icon: <FaHome />, textIcon: 'Página Inicial', whereToNav: '/' },
+    {
+      icon: <IoPeopleSharp />,
+      textIcon: 'Cadastrar Pessoa',
+      whereToNav: '/nova-pessoa',
+    },
+    {
+      icon: <PiBuildingApartmentFill />,
+      textIcon: 'Cadastrar Cidade',
+      whereToNav: '/nova-cidade',
+    },
     {
       icon: <RxDividerVertical />,
       theresClass: false,

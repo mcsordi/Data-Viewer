@@ -13,25 +13,27 @@ import { useNavigate } from 'react-router-dom';
 export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-screen dark:text-white">
+    <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text="Cadastrar Cidade" />
       <ContainerGeneric>
         {editIcons.map((icon, index) => {
-          return (
-            <EditComponent
-              key={index}
-              icon={icon.icon}
-              itsButton={icon.itsButton}
-              textIcon={icon.textIcon}
-              textClass={icon.textClass}
-              theresClass={icon.theresClass}
-              whereToNav={
-                icon.textIcon == 'Pesquisar' || icon.textIcon == 'Voltar'
-                  ? '/cidades'
-                  : ''
-              }
-            />
-          );
+          {
+            return icon.textIcon == 'Cadastrar Cidade' ? (
+              ''
+            ) : (
+              <EditComponent
+                key={index}
+                icon={icon.icon}
+                itsButton={icon.itsButton}
+                textIcon={icon.textIcon}
+                textClass={icon.textClass}
+                theresClass={icon.theresClass}
+                whereToNav={
+                  (icon.textIcon == 'Voltar' && '/cidades') || icon.whereToNav
+                }
+              />
+            );
+          }
         })}
       </ContainerGeneric>
       <div className="pt-5">

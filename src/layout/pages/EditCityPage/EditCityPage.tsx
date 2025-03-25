@@ -33,7 +33,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
     getCityUsingName();
   }, [cityParams]);
   return (
-    <div className="w-full h-screen dark:text-white">
+    <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text={cityParams as string} />
       <ContainerGeneric>
         {loading ? (
@@ -49,9 +49,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                 textClass={icon.textClass}
                 theresClass={icon.theresClass}
                 whereToNav={
-                  icon.textIcon == 'Pesquisar' || icon.textIcon == 'Voltar'
-                    ? '/cidades'
-                    : ''
+                  (icon.textIcon == 'Voltar' && '/cidades') || icon.whereToNav
                 }
               />
             );

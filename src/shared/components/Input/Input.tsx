@@ -34,7 +34,7 @@ export const Input: React.FC<TInput> = ({
         type={type}
         id={id}
         placeholder={placeholder}
-        className="w-sm border outline-0 h-9 rounded-sm p-2 mt-2.5 relative"
+        className="w-full xs:w-sm border outline-0 h-9 rounded-sm p-2 mt-2.5 relative"
         onFocus={() => setInputFocus(true)}
         onBlur={() => {
           setInputFocus(false);

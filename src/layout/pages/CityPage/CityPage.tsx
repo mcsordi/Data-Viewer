@@ -55,7 +55,7 @@ export const CityPage: React.FC = () => {
   }, [debounce, cityPage, deleted]);
 
   return (
-    <div className={`dark:text-white flex w-full flex-col`}>
+    <div className={`dark:text-white flex w-full flex-col px-0.5 xs:px-0`}>
       <ContainerGeneric>
         {loading ? (
           <InputSkeleton />
@@ -80,7 +80,7 @@ export const CityPage: React.FC = () => {
           </>
         )}
       </ContainerGeneric>
-      <div className="dark:bg-neutral-800  border rounded-md px-0 md:px-4 py-2.5 mt-3 border-slate-400">
+      <div className="dark:bg-neutral-800 border rounded-md px-0 md:px-4 py-2.5 mt-3 border-slate-400">
         <table className="w-full">
           <thead className="w-full">
             <tr className="flex  w-full truncate">
@@ -127,7 +127,7 @@ export const CityPage: React.FC = () => {
                         }}
                       />
                     </td>
-                    <td className="w-full px-4 py-2">{nome}</td>
+                    <td className="truncate w-full px-4 py-2">{nome}</td>
                     <td className="w-full px-4 py-2">{estado}</td>
                   </tr>
                 );
