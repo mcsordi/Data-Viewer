@@ -38,11 +38,11 @@ export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
       </ContainerGeneric>
       <div className="pt-5">
         <Formik
-          initialValues={{ city: '', state: '' }}
+          initialValues={{ city: '', state: '', userId: 2 }}
           validationSchema={cityValidation}
-          onSubmit={async ({ city, state }, { resetForm }) => {
-            resetForm({ values: { city: '', state: '' } });
-            await cityRequests.postNewCity(city, state);
+          onSubmit={async ({ city, state, userId }, { resetForm }) => {
+            resetForm({ values: { city: '', state: '', userId: 0 } });
+            await cityRequests.postNewCity(city, state, userId);
             navigate(`/editar/cidade/${city}`);
           }}
         >

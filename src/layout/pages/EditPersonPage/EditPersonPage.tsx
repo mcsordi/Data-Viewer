@@ -9,19 +9,23 @@ import { Input } from '../../../shared/components/Input/Input';
 import { FormContainer } from '../../../shared/components/FormContainer/FormContainer';
 import constants from '../../../shared/facilities';
 import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
-import { validationSchema } from '../NewPersonCadaster/SchemaValidation';
-import { peopleRequests } from '../../../api/PeopleRequests/requests';
-import { TPeopleData } from '../../../shared/types/PeopleData';
+import { validationSchema } from '../NewPersonCadaster/validationSchema';
+import {
+  peopleRequests,
+  TPeopleData,
+} from '../../../api/PeopleRequests/requests';
 import { SelectField } from '../../../shared/components/SelectField/SelectField';
-import { TCity } from '../../../shared/types/Cities';
-import { cityRequests } from '../../../api/CityRequests/request';
+import {
+  cityRequests,
+  TCitiesRequest,
+} from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   const { nome } = useParams();
   const [personData, setPersonData] = useState<TPeopleData>();
-  const [cityData, setCityData] = useState<TCity>();
+  const [cityData, setCityData] = useState<TCitiesRequest>();
   const [personError, setPersonError] = useState<string>();
   const [cityError, setCityError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
@@ -29,10 +33,10 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
     const getPersonByName = async () => {
       setLoading(true);
       const person = await peopleRequests.getByName(nome || '');
-      if (typeof person == 'object') {
-        setPersonData(person);
+      if (person instanceof Error) {
+        setPersonError(person.message);
       } else {
-        setPersonError(person);
+        setPersonData(person.data);
       }
       setLoading(false);
     };
@@ -43,12 +47,13 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
     const getCities = async () => {
       setLoading(true);
 
-      const fetch = await cityRequests.getAllOfTheCities();
-      if (typeof fetch == 'object') {
-        setCityData(fetch);
+      const fetch = await cityRequests.getAllOfTheCities(1);
+      if (fetch instanceof Error) {
+        setCityError(fetch.message);
       } else {
-        setCityError(fetch);
+        setCityData(fetch.data);
       }
+
       setLoading(false);
     };
     getCities();
@@ -78,15 +83,26 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
         <div className="mt-5 text-xl">Ocorreu um erro inesperado</div>
       ) : (
         <FormContainer>
-          {personData?.map(({ nome, email, cidade, id }) => {
+          {personData?.map(({ nome, email, cidade, id, userId }) => {
             return (
               <Formik
                 key={id}
-                initialValues={{ name: nome, email: email, city: cidade }}
+                initialValues={{
+                  name: nome,
+                  email: email,
+                  city: cidade,
+                  userId: 2,
+                }}
                 onSubmit={async ({ name, email, city }) => {
                   return (
-                    await peopleRequests.updateByID(id, name, email, city),
-                    navigate(`/editar/${name}`)
+                    await peopleRequests.updateByID(
+                      id,
+                      name.trim(),
+                      email,
+                      city,
+                      userId,
+                    ),
+                    navigate(`/editar/${name.trim()}`)
                   );
                 }}
                 validationSchema={validationSchema}
@@ -111,7 +127,7 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                     label="Cidades"
                     id="city"
                     name="city"
-                    data={cityData as TCity}
+                    data={cityData as TCitiesRequest}
                   />
                   <SubmitButton text="Editar" />
                 </Form>

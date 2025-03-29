@@ -7,38 +7,38 @@ import { IoPeopleSharp } from 'react-icons/io5';
 import { PiBuildingApartmentFill } from 'react-icons/pi';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
 import { cityRequests } from '../../../api/CityRequests/request';
-import { TCity } from '../../../shared/types/Cities';
-import { TPeopleData } from '../../../shared/types/PeopleData';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { RxDividerVertical } from 'react-icons/rx';
 
 export const HomePage: React.FC = () => {
-  const [peopleCount, setPeopleCount] = useState<TPeopleData>();
+  const [peopleCount, setPeopleCount] = useState<number>(0);
   const [onClick, setOnClick] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [cityCount, setCityCount] = useState<TCity>();
+  const [cityCount, setCityCount] = useState<number>(0);
   const [errorCities, setErrorCities] = useState<string>();
   const [errorPeople, setErrorPeople] = useState<string>();
 
   useEffect(() => {
     const fetchCities = async () => {
       setLoading(true);
-      const fetch = await cityRequests.getAllOfTheCities();
-      if (typeof fetch == 'object') {
-        setCityCount(fetch);
+      const fetch = await cityRequests.getAllOfTheCities(2);
+      if (fetch instanceof Error) {
+        setErrorCities(fetch.message);
       } else {
-        setErrorCities(fetch);
+        setCityCount(fetch.totalCount);
       }
+
       setLoading(false);
     };
     const fetchPeople = async () => {
       setLoading(true);
-      const fetch = await peopleRequests.getAllOfThePeople();
-      if (typeof fetch == 'object') {
-        setPeopleCount(fetch);
+      const fetch = await peopleRequests.getAllOfThePeople(2);
+      if (fetch instanceof Error) {
+        setErrorPeople(fetch.message);
       } else {
-        setErrorPeople(fetch);
+        setPeopleCount(fetch.totalCount);
       }
+
       setLoading(false);
     };
 
@@ -98,11 +98,11 @@ export const HomePage: React.FC = () => {
       ) : (
         <div className="flex gap-3 w-full  mt-5 flex-col items-center sm:flex-row">
           <ViewNumInfo
-            numInfo={cityCount?.length as number}
+            numInfo={cityCount as number}
             textInfo="Cidades Cadastradas"
           />
           <ViewNumInfo
-            numInfo={peopleCount?.length as number}
+            numInfo={peopleCount as number}
             textInfo="Pessoas Cadastradas"
           />
         </div>

@@ -13,10 +13,12 @@ import { EditPersonPage } from '../../layout/pages/EditPersonPage/EditPersonPage
 import { NewCityCadaster } from '../../layout/pages/NewCityCadaster/NewCityCadaster';
 import { EditCityPage } from '../../layout/pages/EditCityPage/EditCityPage';
 import { PiBuildingApartmentFill } from 'react-icons/pi';
+import { LoginPage } from '../../layout/pages/LoginPage/LoginPage';
+import { CadasterPage } from '../../layout/pages/CadasterPage/CadasterPage';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
-    { icon: <FaHome />, textIcon: 'Página Inicial', whereToNav: '/' },
+    { icon: <FaHome />, textIcon: 'Página Inicial', whereToNav: '/home' },
     {
       icon: <IoPeopleSharp />,
       textIcon: 'Cadastrar Pessoa',
@@ -42,7 +44,7 @@ export const RouterBrowser: React.FC = () => {
     {
       icon: <FaHome />,
       text: 'Página Inicial',
-      whereTo: '/',
+      whereTo: '/pagina-inicial',
     },
     {
       icon: <BsBuildingsFill />,
@@ -58,8 +60,10 @@ export const RouterBrowser: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LoginPage />}></Route>
+        <Route path="/cadastrar" element={<CadasterPage />} />
         <Route path="/" element={<CommonPage navigation={navigate} />}>
-          <Route index element={<HomePage />} />
+          <Route path="/pagina-inicial" element={<HomePage />} />
           <Route path="/cidades" element={<CityPage />} />
           <Route path="/pessoas" element={<PeoplePage />} />
           <Route
@@ -78,7 +82,7 @@ export const RouterBrowser: React.FC = () => {
             path="/editar/cidade/:cidade"
             element={<EditCityPage editIcons={editIcons} />}
           />
-          <Route path={'/*'} element={<Navigate to="/" />} />
+          <Route path={'/*'} element={<Navigate to="/home" />} />
         </Route>
       </Routes>
     </BrowserRouter>

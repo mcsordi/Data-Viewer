@@ -5,6 +5,7 @@ import { drawerBtn } from '../../../contexts/DrawerButton/context';
 import { Outlet, useLocation } from 'react-router-dom';
 import { theme } from '../../../contexts/ThemeContext/context';
 import { IoIosArrowDropleftCircle } from 'react-icons/io';
+import { FaUser } from 'react-icons/fa';
 
 type TCommonPage = {
   navigation: {
@@ -36,12 +37,13 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
           className={`dark:bg-neutral-800 bg-white border-l-0 border-t-0 border border-r-0
              border-slate-400 h-28 flex items-center justify-center`}
         >
-          <div className="w-20 border-0 rounded-full">
-            <img
+          <div className="w-20 h-20 border-0 rounded-full flex items-center justify-center bg-zinc-800 dark:bg-white">
+            {/* <img
               className="rounded-full"
               alt="profile image"
               src="../1678304807285.jpeg"
-            />
+            /> */}
+            <FaUser className="text-5xl text-white dark:text-neutral-800" />
           </div>
         </div>
         {navigation?.map((item: Navigation) => {

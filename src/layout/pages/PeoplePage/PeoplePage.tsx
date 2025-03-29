@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
-import { peopleRequests } from '../../../api/PeopleRequests/requests';
+import {
+  peopleRequests,
+  TPeopleData,
+} from '../../../api/PeopleRequests/requests';
 import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
-import { TPeopleData } from '../../../shared/types/PeopleData';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
 import { MdDelete } from 'react-icons/md';
@@ -15,7 +17,7 @@ import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessa
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 
 export const PeoplePage: React.FC = () => {
-  const [peopleData, setPeopleData] = useState<TPeopleData | undefined>([]);
+  const [peopleData, setPeopleData] = useState<TPeopleData>();
   const [responseError, setResponseError] = useState<unknown>();
   const [loading, setLoading] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useSearchParams({
@@ -25,7 +27,7 @@ export const PeoplePage: React.FC = () => {
   const peopleName = searchParams.get('nome');
   const currentPage = Number(searchParams.get('pagina'));
   const debouncing = useDebounce(peopleName || '');
-  const [peopleLength, setPeopleLength] = useState<number | undefined>(0);
+  const [peopleLength, setPeopleLength] = useState<number>();
   const [numOfPages, setNumOfPages] = useState<number>();
   const [deleted, setDeleted] = useState<number>();
   const focus = useRef({} as HTMLInputElement);
@@ -45,12 +47,13 @@ export const PeoplePage: React.FC = () => {
       const response = await peopleRequests.getAll(
         debouncing,
         Number(currentPage),
+        2,
       );
-      if (typeof response == 'object') {
-        setPeopleData(response?.data);
-        setPeopleLength(response?.totalCount);
+      if (response instanceof Error) {
+        setResponseError(response.message);
       } else {
-        setResponseError(response);
+        setPeopleData(response);
+        setPeopleLength(response.length);
       }
       setLoading(false);
     };
@@ -111,7 +114,7 @@ export const PeoplePage: React.FC = () => {
               <IssueMessage message={constants.ERRO_CARREGAMENTO} />
             ) : (
               !loading &&
-              peopleData?.map((el, index) => (
+              peopleData?.map((el, index: number) => (
                 <tr
                   className="w-full hover:bg-amber-300 truncate items-start flex justify-between odd:bg-gray-100 dark:odd:bg-neutral-900 dark:even:bg-neutral-800"
                   key={index}
@@ -145,7 +148,7 @@ export const PeoplePage: React.FC = () => {
               ))
             )}
             {!loading &&
-              peopleData?.length == 0 &&
+              peopleLength == 0 &&
               !responseError &&
               peopleName != '' && (
                 <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />

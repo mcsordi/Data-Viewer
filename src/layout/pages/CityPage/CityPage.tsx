@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
-import { cityRequests, TCitiesReques } from '../../../api/CityRequests/request';
+import {
+  cityRequests,
+  TCitiesRequest,
+} from '../../../api/CityRequests/request';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 import { SearchInput } from '../../../shared/components/SearchInput/SearchInput';
@@ -13,7 +16,7 @@ import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessa
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 
 export const CityPage: React.FC = () => {
-  const [cities, setCities] = useState<TCitiesReques>();
+  const [cities, setCities] = useState<TCitiesRequest>();
   const [cityCount, setCityCount] = useState<number>();
   const [searchParams, setSearchParams] = useSearchParams({
     cidade: '',
@@ -42,6 +45,7 @@ export const CityPage: React.FC = () => {
       const request = await cityRequests.getAll(
         debounce,
         cityPage ? cityPage : '1',
+        2,
       );
       if (typeof request == 'object') {
         setCities(await request.cities);

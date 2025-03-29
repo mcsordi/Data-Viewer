@@ -1,5 +1,6 @@
 const constants = {
   API_PEOPLE_URL: 'http://localhost:8000/pessoas',
+  API_USERS_URL: 'http://localhost:8000/usuarios',
   API_CITY_URL: 'http://localhost:8000/cidades',
   MAX_LINHAS: 7,
   LISTA_VAZIA: 'Sua lista está vazia',

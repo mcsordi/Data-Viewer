@@ -5,31 +5,34 @@ import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 import { Form, Formik } from 'formik';
 import { Input } from '../../../shared/components/Input/Input';
 import { peopleRequests } from '../../../api/PeopleRequests/requests';
-import { validationSchema } from './SchemaValidation';
+import { validationSchema } from './validationSchema';
 import { HeaderPage } from '../../../shared/components/HeaderPage/HeaderPage';
 import { FormContainer } from '../../../shared/components/FormContainer/FormContainer';
 import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButton';
 import constants from '../../../shared/facilities';
 import { useNavigate } from 'react-router-dom';
 import { SelectField } from '../../../shared/components/SelectField/SelectField';
-import { cityRequests } from '../../../api/CityRequests/request';
-import { TCity } from '../../../shared/types/Cities';
+import {
+  cityRequests,
+  TCitiesRequest,
+} from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
 
 export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
-  const [citiesData, setCitiesData] = useState<TCity>();
+  const [citiesData, setCitiesData] = useState<TCitiesRequest>();
   const [citiesError, setCitiesError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   useEffect(() => {
     const getAllCities = async () => {
       setLoading(true);
-      const fetch = await cityRequests.getAllOfTheCities();
-      if (typeof fetch == 'object') {
-        setCitiesData(fetch);
+      const fetch = await cityRequests.getAllOfTheCities(2);
+      if (fetch instanceof Error) {
+        setCitiesError(fetch.message);
       } else {
-        setCitiesError(fetch);
+        setCitiesData(fetch.data);
       }
+
       setLoading(false);
     };
     getAllCities();
@@ -69,12 +72,24 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
       {!loading && !citiesError && (
         <FormContainer>
           <Formik
-            initialValues={{ name: '', email: '', city: 'Selecionar' }}
+            initialValues={{
+              name: '',
+              email: '',
+              city: 'Selecionar',
+              userId: 2,
+            }}
             validationSchema={validationSchema}
-            onSubmit={async ({ name, email, city }, { resetForm }) => {
-              await peopleRequests.postNewUser(name, email, city);
-              navigate(`/editar/${name}`);
-              resetForm({ values: { name: '', city: '', email: '' } });
+            onSubmit={async ({ name, email, city, userId }, { resetForm }) => {
+              await peopleRequests.postNewUser(
+                name.trim(),
+                email,
+                city,
+                userId,
+              );
+              navigate(`/editar/${name.trim()}`);
+              resetForm({
+                values: { name: '', city: '', email: '', userId: 0 },
+              });
             }}
           >
             <Form>
@@ -93,7 +108,7 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
                 type="email"
               />
               <SelectField
-                data={citiesData as TCity}
+                data={citiesData as TCitiesRequest}
                 id="city"
                 label="Cidades"
                 name="city"

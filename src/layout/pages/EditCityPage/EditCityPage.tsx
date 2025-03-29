@@ -59,11 +59,11 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       {error ? (
         <div className="mt-5 text-xl">Ocorreu um erro inesperado</div>
       ) : (
-        city?.map(({ id, nome, estado }) => {
+        city?.map(({ id, nome, estado, userId }) => {
           return (
             <div className="pt-5" key={id}>
               <Formik
-                initialValues={{ city: nome, state: estado }}
+                initialValues={{ city: nome, state: estado, userId: userId }}
                 onSubmit={async ({ city, state }) => {
                   await cityRequests.updateCity(id, city, state);
                   navigation(`/editar/cidade/${city}`);
