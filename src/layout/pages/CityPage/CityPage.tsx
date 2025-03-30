@@ -47,12 +47,13 @@ export const CityPage: React.FC = () => {
         cityPage ? cityPage : '1',
         2,
       );
-      if (typeof request == 'object') {
-        setCities(await request.cities);
-        setCityCount(request.totalCount);
+      if (request instanceof Error) {
+        setFetchError(request.message);
       } else {
-        setFetchError(request);
+        setCities(request.data);
+        setCityCount(request.totalCount);
       }
+
       setLoading(false);
     };
     getCities();

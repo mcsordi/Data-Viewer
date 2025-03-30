@@ -7,34 +7,43 @@ export type TUser = {
 }[];
 
 export const userRequest = {
-  async getUserByEmail(
-    email: string,
-    pass: string,
-  ): Promise<TUser | string | Response> {
+  async getUserByEmail(email: string, pass: string): Promise<TUser | Error> {
     try {
       const fetchUser = await fetch(
         `${constants.API_USERS_URL}?email=${email}&&senha=${pass}`,
       );
       const userJson: TUser = await fetchUser.json();
-      return userJson;
+      if (userJson) {
+        return userJson;
+      }
+      return new Error('Erro ao consultar usuário');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return (
+        new Error((error as { message: string }).message) ||
+        'Erro ao consultar usuário'
+      );
     }
-    return 'Erro desconhecido';
   },
-  async postUserData(name: string, email: string, pass: string) {
+  async postUserData(
+    name: string,
+    email: string,
+    pass: string,
+  ): Promise<Response | Error> {
     try {
       const postData = await fetch(constants.API_USERS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, email: email, senha: pass }),
       });
-      return postData;
-    } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
+      if (postData) {
+        return postData;
       }
-      return 'Erro desconhecido';
+      return new Error('Erro ao cadastrar novo usuário');
+    } catch (error) {
+      return new Error(
+        (error as { message: string }).message ||
+          'Erro ao cadastrar novo usuário',
+      );
     }
   },
 };

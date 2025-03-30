@@ -23,10 +23,10 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
     const getCityUsingName = async () => {
       setLoading(true);
       const dataCity = await cityRequests.getCityByName(cityParams as string);
-      if (typeof dataCity == 'object') {
-        setCity(dataCity);
+      if (dataCity instanceof Error) {
+        setError(dataCity.message);
       } else {
-        setError(dataCity);
+        setCity(dataCity);
       }
       setLoading(false);
     };

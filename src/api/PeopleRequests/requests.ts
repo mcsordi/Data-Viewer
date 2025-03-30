@@ -32,7 +32,10 @@ export const peopleRequests = {
           userId: userId,
         }),
       });
-      return postMethod;
+      if (postMethod) {
+        return postMethod;
+      }
+      return new Error('Erro ao cadastrar pessoa');
     } catch (error) {
       return (
         new Error((error as { message: string }).message) ||
@@ -132,7 +135,7 @@ export const peopleRequests = {
       );
     }
   },
-  async deleteById(id: number) {
+  async deleteById(id: number): Promise<Response | Error> {
     try {
       const deleteMethod = await fetch(`${constants.API_PEOPLE_URL}/${id}`, {
         method: 'DELETE',
@@ -140,14 +143,14 @@ export const peopleRequests = {
           'Content-Type': 'application/json',
         },
       });
-      return deleteMethod;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return 'Erro desconhecido';
+      if (deleteMethod) {
+        return deleteMethod;
       }
+      return new Error('Erro ao deletar pessoa');
+    } catch (error: unknown) {
+      return new Error(
+        (error as { message: string }).message || 'Erro ao deletar pessoa',
+      );
     }
   },
 };

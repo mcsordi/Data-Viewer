@@ -16,7 +16,11 @@ export type TCityData = {
 };
 
 export const cityRequests = {
-  async getAll(name = '', page = '1', userId: number) {
+  async getAll(
+    name = '',
+    page = '1',
+    userId: number,
+  ): Promise<Error | TCityData> {
     try {
       const getAllCities = await fetch(
         `${constants.API_CITY_URL}/?nome_like=${name}&_page=${page}&_limit=${constants.MAX_LINHAS}&userId=${userId}`,
@@ -24,12 +28,16 @@ export const cityRequests = {
       const citiesTotalCount =
         Number(getAllCities.headers.get('X-Total-Count')) || 0;
 
-      const citiesJson: Promise<TCitiesRequest> = getAllCities.json();
-      return { totalCount: citiesTotalCount || 0, cities: citiesJson };
+      const citiesJson: TCitiesRequest = await getAllCities.json();
+      if (citiesJson) {
+        return { totalCount: citiesTotalCount || 0, data: citiesJson };
+      }
+      return new Error('Erro ao consultar cidades');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return new Error(
+        (error as { message: string }).message || 'Erro ao consultar cidades',
+      );
     }
-    return 'Erro desconhecido';
   },
   async getAllOfTheCities(userId: number): Promise<TCityData | Error> {
     try {
@@ -54,54 +62,80 @@ export const cityRequests = {
     }
   },
 
-  async getCityByName(city: string) {
+  async getCityByName(city: string): Promise<TCity | Error> {
     try {
       const fetchNameCity = await fetch(
         `${constants.API_CITY_URL}?nome=${city}`,
       );
       const nameCityJson: TCity = await fetchNameCity.json();
-      return nameCityJson;
+      if (nameCityJson) {
+        return nameCityJson;
+      }
+      return new Error('Erro ao consultar cidade');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return new Error(
+        (error as { message: string }).message || 'Erro ao consultar cidade',
+      );
     }
-    return 'Erro desconhecido';
   },
-  async deleteById(id: number) {
+  async deleteById(id: number): Promise<Response | Error> {
     try {
       const deleteMethod = await fetch(`${constants.API_CITY_URL}/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
-      return deleteMethod;
+      if (deleteMethod) {
+        return deleteMethod;
+      }
+      return new Error('Erro ao deletar cidade');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return new Error(
+        (error as { message: string }).message || 'Erro ao deletar cidade',
+      );
     }
-    return 'Erro desconhecido';
   },
-  async updateCity(id: number, name: string, state: string, userId = 2) {
+  async updateCity(
+    id: number,
+    name: string,
+    state: string,
+    userId = 2,
+  ): Promise<Response | Error> {
     try {
       const methodUptade = await fetch(`${constants.API_CITY_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, estado: state, userId: userId }),
       });
-      return methodUptade;
+      if (methodUptade) {
+        return methodUptade;
+      }
+      return new Error('Erro ao atualizar cidade');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return new Error(
+        (error as { message: string }).message || 'Erro ao atualizar cidade',
+      );
     }
-    return 'Erro desconhecido';
   },
-  async postNewCity(name: string, state: string, userId = 2) {
+  async postNewCity(
+    name: string,
+    state: string,
+    userId = 2,
+  ): Promise<Response | Error> {
     try {
-      const methodUptade = await fetch(constants.API_CITY_URL, {
+      const postMethod = await fetch(constants.API_CITY_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, estado: state, userId: userId }),
       });
-      return methodUptade;
+      if (postMethod) {
+        return postMethod;
+      }
+      return new Error('Erro ao cadastrar nova cidade');
     } catch (error) {
-      if (error instanceof Error) return error.message;
+      return new Error(
+        (error as { message: string }).message ||
+          'Erro ao cadastrar nova cidade',
+      );
     }
-    return 'Erro desconhecido';
   },
 };

@@ -6,6 +6,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { theme } from '../../../contexts/ThemeContext/context';
 import { IoIosArrowDropleftCircle } from 'react-icons/io';
 import { FaUser } from 'react-icons/fa';
+import { IoExit } from 'react-icons/io5';
+import { authContext } from '../../../contexts/AuthContext/context';
 
 type TCommonPage = {
   navigation: {
@@ -26,6 +28,7 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
   const { showDrawer, handleClick } = useContext(drawerBtn);
   const currentLocation = useLocation();
   const { themeDark } = useContext(theme);
+  const { logout } = useContext(authContext);
 
   return (
     <div className={`${themeDark} flex flex-row h-screen`}>
@@ -60,7 +63,17 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
             />
           );
         })}
-        <ThemeButton />
+        <div className="w-full absolute bottom-0 ">
+          <ThemeButton />
+          <button
+            type="button"
+            className=" gap-8 px-5 font-medium text-lg dark:text-white cursor-pointer flex items-center justify-start w-full py-3 border rounded-t-md border-gray-400"
+            onClick={() => logout()}
+          >
+            <IoExit className="text-4xl dark:text-amber-300" />
+            Sair
+          </button>
+        </div>
       </div>
       <div
         className={`flex flex-col h-full w-full absolute lg:relative dark:bg-zinc-900 bg-white pt-8 xs:px-4 sm:px-8`}
