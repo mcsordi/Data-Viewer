@@ -8,6 +8,9 @@ import { IoIosArrowDropleftCircle } from 'react-icons/io';
 import { IoExit } from 'react-icons/io5';
 import { authContext } from '../../../contexts/AuthContext/context';
 import { ProfileImage } from '../../../shared/components/ProfileImage/ProfileImage';
+import { GenericDrawerButton } from '../../../shared/components/GenericDrawerButton/GenericDrawerButton';
+import { BiSolidTrashAlt } from 'react-icons/bi';
+import { removePhoto } from '../../../contexts/RemovePhoto/context';
 
 type TCommonPage = {
   navigation: {
@@ -29,6 +32,7 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
   const currentLocation = useLocation();
   const { themeDark } = useContext(theme);
   const { logout } = useContext(authContext);
+  const { handleClickBtn } = useContext(removePhoto);
 
   return (
     <div className={`${themeDark} flex flex-row h-screen`}>
@@ -59,16 +63,18 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
         })}
         <div className="w-full absolute bottom-0 ">
           <ThemeButton />
-          <button
-            type="button"
-            className=" gap-8 px-5 font-medium text-lg dark:text-white cursor-pointer flex items-center justify-start w-full py-3 border rounded-t-md border-gray-400"
+          <GenericDrawerButton
+            icon={<BiSolidTrashAlt className="text-4xl dark:text-white" />}
+            buttonText="Excluir foto"
+            onClick={handleClickBtn}
+          />
+          <GenericDrawerButton
+            icon={<IoExit className="text-4xl dark:text-amber-300" />}
+            buttonText="Sair"
             onClick={() => {
               logout(), localStorage.removeItem('ACCESS_APPLICATION_EMAIL');
             }}
-          >
-            <IoExit className="text-4xl dark:text-amber-300" />
-            Sair
-          </button>
+          />
         </div>
       </div>
       <div

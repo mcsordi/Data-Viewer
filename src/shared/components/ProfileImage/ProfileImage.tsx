@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { RiImageEditFill } from 'react-icons/ri';
 import { CgSpinnerAlt } from 'react-icons/cg';
 import { TUser, userRequest } from '../../../api/UserRequests/request';
-import { IoClose } from 'react-icons/io5';
+import { removePhoto } from '../../../contexts/RemovePhoto/context';
 
 export const ProfileImage = () => {
   const accessEmail = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
@@ -15,6 +15,7 @@ export const ProfileImage = () => {
   const [userData, setUserData] = useState({} as TUser);
   const [userId, setUserId] = useState<''>();
   const [onHandleImage, setOnHandleImage] = useState<boolean>(false);
+  const { onClickBtn } = useContext(removePhoto);
 
   const handleUpdateImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -53,13 +54,13 @@ export const ProfileImage = () => {
       if (res instanceof Error) {
         setFetchError(res.message);
       } else {
-        setImageUrl(res[0].imagem);
+        onClickBtn ? setImageUrl(undefined) : setImageUrl(res[0].imagem);
         setUserId(res[0].id);
         setUserData(res);
       }
     };
     verifyImage();
-  }, [accessEmail]);
+  }, [accessEmail, onClickBtn]);
 
   useEffect(() => {
     const updateUser = async () => {
@@ -68,13 +69,15 @@ export const ProfileImage = () => {
         userData[0]?.email,
         userData[0]?.senha,
         Number(userId),
-        imageUrl,
+        onClickBtn ? undefined : imageUrl,
       );
       return update;
     };
     onHandleImage && updateUser();
+    onClickBtn && updateUser();
+
     setOnHandleImage(false);
-  }, [userData, imageUrl, userId, onHandleImage]);
+  }, [userData, imageUrl, userId, onHandleImage, onClickBtn]);
   return (
     <>
       <div
