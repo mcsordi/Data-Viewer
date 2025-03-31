@@ -5,7 +5,7 @@ export type TAuth = {
 };
 const jwtAuth = async (email: string, pass: string): Promise<TAuth | Error> => {
   try {
-    const getUser = await userRequest.getUserByEmail(email, pass);
+    const getUser = await userRequest.getUserByEmailAndPass(email, pass);
     const auth = await fetch('http://localhost:8000/auth');
     const authJson: TAuth = await auth.json();
     if (getUser.toString().length > 0) {

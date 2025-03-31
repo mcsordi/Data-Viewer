@@ -15,6 +15,7 @@ import { NewButton } from '../../../shared/components/NewButton/NewButton';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
+import { userRequest } from '../../../api/UserRequests/request';
 
 export const PeoplePage: React.FC = () => {
   const [peopleData, setPeopleData] = useState<TPeopleData>();
@@ -31,6 +32,7 @@ export const PeoplePage: React.FC = () => {
   const [numOfPages, setNumOfPages] = useState<number>();
   const [deleted, setDeleted] = useState<number>();
   const focus = useRef({} as HTMLInputElement);
+  const [id, setId] = useState({} as number);
 
   const loopPagination = () => {
     const arr = [];
@@ -47,7 +49,7 @@ export const PeoplePage: React.FC = () => {
       const response = await peopleRequests.getAll(
         debouncing,
         Number(currentPage),
-        2,
+        id,
       );
       if (response instanceof Error) {
         setResponseError(response.message);
@@ -58,13 +60,26 @@ export const PeoplePage: React.FC = () => {
       setLoading(false);
     };
     getPeopleData();
-  }, [currentPage, debouncing, deleted]);
+  }, [currentPage, debouncing, deleted, id]);
 
   useEffect(() => {
     return setNumOfPages(
       Math.ceil((peopleLength as number) / constants.MAX_LINHAS),
     );
   }, [peopleLength]);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+      const dataUser = await userRequest.getUserByEmail(emailUser as string);
+      if (dataUser instanceof Error) {
+        setResponseError(dataUser.message);
+      } else {
+        setId(dataUser);
+      }
+    };
+    getUserId();
+  }, []);
 
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full px-0.5 xs:px-0">
@@ -153,6 +168,9 @@ export const PeoplePage: React.FC = () => {
               peopleName != '' && (
                 <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />
               )}
+            {peopleData?.length === 0 && !responseError && !loading && (
+              <IssueMessage message="Nenhuma pessoa foi cadastrada" />
+            )}
           </tbody>
         </table>
         {!loading && !responseError && (

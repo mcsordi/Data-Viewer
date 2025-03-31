@@ -5,9 +5,9 @@ import { drawerBtn } from '../../../contexts/DrawerButton/context';
 import { Outlet, useLocation } from 'react-router-dom';
 import { theme } from '../../../contexts/ThemeContext/context';
 import { IoIosArrowDropleftCircle } from 'react-icons/io';
-import { FaUser } from 'react-icons/fa';
 import { IoExit } from 'react-icons/io5';
 import { authContext } from '../../../contexts/AuthContext/context';
+import { ProfileImage } from '../../../shared/components/ProfileImage/ProfileImage';
 
 type TCommonPage = {
   navigation: {
@@ -38,17 +38,11 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
       >
         <div
           className={`dark:bg-neutral-800 bg-white border-l-0 border-t-0 border border-r-0
-             border-slate-400 h-28 flex items-center justify-center`}
+             border-slate-400 py-3  flex flex-col items-center justify-center gap-2`}
         >
-          <div className="w-20 h-20 border-0 rounded-full flex items-center justify-center bg-zinc-800 dark:bg-white">
-            {/* <img
-              className="rounded-full"
-              alt="profile image"
-              src="../1678304807285.jpeg"
-            /> */}
-            <FaUser className="text-5xl text-white dark:text-neutral-800" />
-          </div>
+          <ProfileImage />
         </div>
+
         {navigation?.map((item: Navigation) => {
           return (
             <DrawerNav
@@ -68,7 +62,9 @@ export const CommonPage: React.FC<TCommonPage> = ({ navigation }) => {
           <button
             type="button"
             className=" gap-8 px-5 font-medium text-lg dark:text-white cursor-pointer flex items-center justify-start w-full py-3 border rounded-t-md border-gray-400"
-            onClick={() => logout()}
+            onClick={() => {
+              logout(), localStorage.removeItem('ACCESS_APPLICATION_EMAIL');
+            }}
           >
             <IoExit className="text-4xl dark:text-amber-300" />
             Sair

@@ -20,6 +20,7 @@ import {
   TCitiesRequest,
 } from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
+import { userRequest } from '../../../api/UserRequests/request';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
@@ -29,10 +30,11 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const [personError, setPersonError] = useState<string>();
   const [cityError, setCityError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
+  const [id, setId] = useState({} as number);
   useEffect(() => {
     const getPersonByName = async () => {
       setLoading(true);
-      const person = await peopleRequests.getByName(nome || '');
+      const person = await peopleRequests.getByName(nome || '', id);
       if (person instanceof Error) {
         setPersonError(person.message);
       } else {
@@ -41,13 +43,13 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       setLoading(false);
     };
     getPersonByName();
-  }, [nome]);
+  }, [nome, id]);
 
   useEffect(() => {
     const getCities = async () => {
       setLoading(true);
 
-      const fetch = await cityRequests.getAllOfTheCities(1);
+      const fetch = await cityRequests.getAllOfTheCities(id);
       if (fetch instanceof Error) {
         setCityError(fetch.message);
       } else {
@@ -57,6 +59,19 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       setLoading(false);
     };
     getCities();
+  }, [id]);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+      const userId = await userRequest.getUserByEmail(emailUser as string);
+      if (userId instanceof Error) {
+        setCityError(userId.message);
+      } else {
+        setId(userId);
+      }
+    };
+    getUserId();
   }, []);
 
   return (
@@ -129,7 +144,7 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                     name="city"
                     data={cityData as TCitiesRequest}
                   />
-                  <SubmitButton text="Editar" />
+                  <SubmitButton loading={loading as boolean} text="Editar" />
                 </Form>
               </Formik>
             );

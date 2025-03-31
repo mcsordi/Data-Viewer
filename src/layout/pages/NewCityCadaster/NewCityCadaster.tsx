@@ -9,9 +9,29 @@ import { SubmitButton } from '../../../shared/components/SubmitButton/SubmitButt
 import { cityValidation } from './CityValidation';
 import { cityRequests } from '../../../api/CityRequests/request';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { userRequest } from '../../../api/UserRequests/request';
+import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 
 export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
+  const [error, setError] = useState<string>();
+  const [id, setId] = useState<number>();
+  const email = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getUserId = async () => {
+      setLoading(true);
+      const userId = await userRequest.getUserByEmail(email as string);
+      if (userId instanceof Error) {
+        setError(userId.message);
+      } else {
+        setId(userId);
+      }
+      setLoading(false);
+    };
+    getUserId();
+  }, [email]);
   return (
     <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text="Cadastrar Cidade" />
@@ -38,11 +58,11 @@ export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
       </ContainerGeneric>
       <div className="pt-5">
         <Formik
-          initialValues={{ city: '', state: '', userId: 2 }}
+          initialValues={{ city: '', state: '' }}
           validationSchema={cityValidation}
-          onSubmit={async ({ city, state, userId }, { resetForm }) => {
-            resetForm({ values: { city: '', state: '', userId: 0 } });
-            await cityRequests.postNewCity(city, state, userId);
+          onSubmit={async ({ city, state }, { resetForm }) => {
+            resetForm({ values: { city: '', state: '' } });
+            await cityRequests.postNewCity(city, state, id);
             navigate(`/editar/cidade/${city}`);
           }}
         >
@@ -61,10 +81,11 @@ export const NewCityCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
               placeholder="SP"
               type="text"
             />
-            <SubmitButton text="Enviar" />
+            <SubmitButton loading={loading} text="Enviar" />
           </Form>
         </Formik>
       </div>
+      {error && <IssueMessage message="Ocorreu um erro inesperado" />}
     </div>
   );
 };

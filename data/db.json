@@ -1,222 +1,83 @@
 {
   "pessoas": [
     {
-      "nome": "Mariana Bolignon",
-      "email": "mari@gmail.com",
-      "cidade": "Ponta Grossa",
-      "id": 1,
-      "userId": 1
-    },
-    {
-      "nome": "Leonardo Faian",
-      "email": "leo@gmail.com",
-      "cidade": "Vila Velha",
-      "id": 2,
-      "userId": 1
-    },
-    {
-      "nome": "James salada de fruta",
-      "email": "frutas@gmail.com",
-      "cidade": "Jundiai",
-      "id": 3,
-      "userId": 1
-    },
-    {
-      "nome": "Hugo Boss",
-      "email": "hugo@gmail.com",
-      "cidade": "Rio de Janeiro",
-      "id": 4,
-      "userId": 1
-    },
-    {
-      "nome": "Thais Bianca",
-      "email": "thais@gmail.com",
-      "cidade": "Santos",
-      "id": 5,
-      "userId": 1
-    },
-    {
-      "nome": "Felipe Franco",
-      "email": "franco@gmail.com",
-      "cidade": "Foz do Iguaçu",
-      "id": 6,
-      "userId": 1
-    },
-    {
-      "nome": "Gustavo Lima",
-      "email": "lima@gmail.com",
-      "cidade": "Vila Velha",
-      "id": 8,
-      "userId": 1
-    },
-    {
-      "nome": "Carlos Maia",
-      "email": "maia@gmail.com",
-      "cidade": "Apucarana",
-      "id": 10,
-      "userId": 1
-    },
-    {
-      "nome": "Kleber Bambam",
-      "email": "bambam@gmail.com",
-      "cidade": "Apucarana",
-      "id": 11,
-      "userId": 1
-    },
-    {
-      "nome": "Silvio Santos",
-      "email": "santos@gmail.com",
-      "cidade": "Santos",
-      "id": 12,
-      "userId": 1
-    },
-    {
-      "nome": "Alan Delon",
-      "email": "delon@gmail.com",
-      "cidade": "Jundiai",
-      "id": 13,
-      "userId": 1
-    },
-    {
-      "nome": "Torresmo",
-      "email": "torresmo@gmail.com",
-      "cidade": "Foz do Iguaçu",
-      "id": 14,
-      "userId": 1
-    },
-    {
-      "nome": "Yakuza",
-      "email": "yakuza@gmail.com",
-      "cidade": "Boa Esperança",
+      "nome": "Patrick",
+      "email": "patrick@gmail.com",
+      "cidade": "Campo Mourão",
       "userId": 2,
-      "id": 15
+      "id": 1
     },
     {
-      "nome": "Togordo",
-      "email": "tiago@gmail.com",
-      "cidade": "Sorocaba",
+      "nome": "Luiza sonsa",
+      "email": "sonsa@gmail.com",
+      "cidade": "Maringa",
       "userId": 2,
-      "id": 16
+      "id": 2
     },
     {
-      "nome": "Madureira",
-      "email": "madureira@gmail.com",
-      "cidade": "Itupeva",
-      "userId": 2,
-      "id": 17
+      "nome": "Tales",
+      "email": "Tales@gmail.com",
+      "cidade": "Juranda",
+      "userId": 1,
+      "id": 3
+    },
+    {
+      "nome": "Talita",
+      "email": "Talita@gmail.com",
+      "cidade": "Juranda",
+      "userId": 1,
+      "id": 4
+    },
+    {
+      "nome": "Augustus",
+      "email": "cunhado@gmail.com",
+      "cidade": "Londrina",
+      "userId": 1,
+      "id": 5
     }
   ],
   "cidades": [
     {
-      "nome": "Palotina",
-      "estado": "PR",
-      "id": 1,
-      "userId": 1
-    },
-    {
-      "nome": "Foz do Iguaçu",
-      "estado": "PR",
-      "id": 2,
-      "userId": 1
-    },
-    {
-      "nome": "Sorocaba",
-      "estado": "SP",
-      "id": 3,
-      "userId": 1
-    },
-    {
-      "nome": "Santos",
-      "estado": "SP",
-      "id": 4,
-      "userId": 1
-    },
-    {
-      "nome": "Jundiai",
-      "estado": "SP",
-      "id": 5,
-      "userId": 1
-    },
-    {
-      "nome": "Boa Esperança",
-      "estado": "PR",
-      "id": 6,
-      "userId": 1
-    },
-    {
-      "nome": "Balneário",
-      "estado": "SC",
-      "id": 7,
-      "userId": 1
-    },
-    {
-      "nome": "Florianópolis",
-      "estado": "SC",
-      "id": 8,
-      "userId": 1
-    },
-    {
-      "nome": "Rio Branco",
-      "estado": "AC",
-      "id": 9,
-      "userId": 1
-    },
-    {
-      "nome": "Vila Velha",
-      "estado": "ES",
-      "id": 10,
-      "userId": 1
-    },
-    {
-      "nome": "Rio de Janeiro",
-      "estado": "RJ",
-      "id": 11,
-      "userId": 1
-    },
-    {
-      "nome": "Apucarana",
-      "estado": "PR",
-      "id": 12,
-      "userId": 1
-    },
-    {
-      "nome": "Rolândia",
-      "estado": "PR",
-      "id": 13,
-      "userId": 1
-    },
-    {
-      "nome": "Ribeirão das Neves",
-      "estado": "MG",
-      "id": 15,
-      "userId": 1
-    },
-    {
-      "nome": "Ponta Grossa",
-      "estado": "PR",
-      "id": 16,
-      "userId": 1
-    },
-    {
-      "nome": "Guarapuava",
+      "nome": "Campo Mourão",
       "estado": "PR",
       "userId": 2,
-      "id": 17
+      "id": 4
     },
     {
-      "nome": "Itupeva",
+      "nome": "Toledo",
       "estado": "PR",
-      "userId": 2,
-      "id": 18
+      "userId": 1,
+      "id": 5
+    },
+    {
+      "nome": "Cascavel",
+      "estado": "PR",
+      "userId": 1,
+      "id": 6
+    },
+    {
+      "nome": "Londrina",
+      "estado": "PR",
+      "userId": 1,
+      "id": 7
     }
   ],
-  "auth": { "accessToken": "aaaa.bbbb.cccc.dddd" },
+  "auth": {
+    "accessToken": "aaaa.bbbb.cccc.dddd"
+  },
   "usuarios": [
+    {
+      "nome": "Armando Pinto",
+      "email": "armando@gmail.com",
+      "senha": "123456",
+      "imagem": "http://res.cloudinary.com/dyjsevpwu/image/upload/v1743443146/hqabrjasiireuypnubcj.jpg",
+      "id": 1
+    },
     {
       "nome": "teste",
       "email": "teste@gmail.com",
       "senha": "123456",
-      "id": 1
+      "id": 2
     }
   ]
 }

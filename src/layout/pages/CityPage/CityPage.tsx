@@ -14,6 +14,7 @@ import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
+import { userRequest } from '../../../api/UserRequests/request';
 
 export const CityPage: React.FC = () => {
   const [cities, setCities] = useState<TCitiesRequest>();
@@ -31,21 +32,34 @@ export const CityPage: React.FC = () => {
   const lessOnePage = Math.ceil(((cityCount as number) - 1) / 7);
   const [deleted, setDeleted] = useState<number>();
   const focus = useRef({} as HTMLInputElement);
+  const [userId, setUserId] = useState({} as number);
+
   const loopPages = () => {
     const citiesArr = [];
     for (let i = 1; i <= totalPages; i++) {
       citiesArr.push(i);
     }
-
     return citiesArr;
   };
+  useEffect(() => {
+    const getIdUser = async () => {
+      const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+      const dataUser = await userRequest.getUserByEmail(emailUser as string);
+      if (dataUser instanceof Error) {
+        setFetchError(dataUser.message);
+      } else {
+        setUserId(dataUser);
+      }
+    };
+    getIdUser();
+  }, []);
   useEffect(() => {
     const getCities = async () => {
       setLoading(true);
       const request = await cityRequests.getAll(
         debounce,
         cityPage ? cityPage : '1',
-        2,
+        userId,
       );
       if (request instanceof Error) {
         setFetchError(request.message);
@@ -57,7 +71,7 @@ export const CityPage: React.FC = () => {
       setLoading(false);
     };
     getCities();
-  }, [debounce, cityPage, deleted]);
+  }, [debounce, cityPage, deleted, userId]);
 
   return (
     <div className={`dark:text-white flex w-full flex-col px-0.5 xs:px-0`}>
@@ -137,6 +151,9 @@ export const CityPage: React.FC = () => {
                   </tr>
                 );
               })}
+            {cities?.length == 0 && !fetchError && !loading && (
+              <IssueMessage message="Nenhuma cidade foi cadastrada" />
+            )}
           </tbody>
         </table>
         <div

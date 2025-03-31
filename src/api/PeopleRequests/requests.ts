@@ -88,10 +88,13 @@ export const peopleRequests = {
     }
   },
 
-  async getByName(name: string): Promise<TResponseData | Error> {
+  async getByName(
+    name: string,
+    userId: number,
+  ): Promise<TResponseData | Error> {
     try {
       const fetchPerson = await fetch(
-        `${constants.API_PEOPLE_URL}?nome=${name}`,
+        `${constants.API_PEOPLE_URL}?nome=${name}&&userId=${userId}`,
       );
       const dataJson: TPeopleData = await fetchPerson.json();
       if (dataJson) {

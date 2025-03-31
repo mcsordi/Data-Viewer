@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import { InputLogin } from '../../../shared/components/InputLogin/InputLogin';
 import { validationSchema } from './validationSchema';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LoginButton } from '../../../shared/components/LoginButton/LoginButton';
 import { ValidLink } from '../../../shared/components/ValidLink/ValidLink';
 import { authContext } from '../../../contexts/AuthContext/context';
@@ -13,10 +13,10 @@ export const LoginPage: React.FC = () => {
   const [deniedUser, setDeniedUser] = useState<boolean>();
   const { login, isAuthenticated } = useContext(authContext);
   const navigate = useNavigate();
-  const authenticated = useMemo(() => {
+  useEffect(() => {
     isAuthenticated && navigate('/pagina-inicial');
   }, [isAuthenticated, navigate]);
-  authenticated;
+
   return (
     <section className="items-center justify-center w-full h-screen flex">
       <div className="flex flex-col w-sm py-6  shadow-neutral-400 shadow-2xl rounded-md items-center justify-center bg-gray-100">
@@ -24,13 +24,17 @@ export const LoginPage: React.FC = () => {
           initialValues={{ email: '', pass: '' }}
           onSubmit={async ({ email, pass }) => {
             setLoading(true);
+
             const loginResponse = await login(email, pass);
+
             if (loginResponse == 'Failed to fetch') {
               setError('Failed to fetch');
+            } else if (loginResponse == 'Erro ao validar token') {
+              setDeniedUser(true);
+            } else {
+              setDeniedUser(false);
+              localStorage.setItem('ACCESS_APPLICATION_EMAIL', email);
             }
-            loginResponse == 'Erro ao validar token'
-              ? setDeniedUser(true)
-              : setDeniedUser(false);
 
             setLoading(false);
           }}
@@ -39,11 +43,16 @@ export const LoginPage: React.FC = () => {
           <Form className="flex flex-col w-full px-6">
             <InputLogin
               id="email"
-              label="Email"
+              labelText="Email"
               typeInput="email"
               name="email"
             />
-            <InputLogin id="pass" label="Senha" typeInput="text" name="pass" />
+            <InputLogin
+              id="pass"
+              labelText="Senha"
+              typeInput="text"
+              name="pass"
+            />
             <LoginButton loading={loading} btnText="Entrar" />
             <ValidLink
               begin="Não"
@@ -61,7 +70,7 @@ export const LoginPage: React.FC = () => {
           className={`${error ? 'flex' : 'hidden'} mt-0 w-full px-6 text-sm font-bold text-red-600`}
         >
           {error && 'Erro ao entrar na página'}
-          {!isAuthenticated && 'Email ou senha estão incorretos'}
+          {!isAuthenticated && !error && 'Email ou senha estão incorretos'}
         </div>
       </div>
     </section>

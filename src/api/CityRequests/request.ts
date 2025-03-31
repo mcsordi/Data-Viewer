@@ -1,3 +1,4 @@
+import { use } from 'react';
 import constants from '../../shared/facilities';
 import { TCity } from '../../shared/types/Cities';
 export type TCitiesRequest = {
@@ -62,10 +63,10 @@ export const cityRequests = {
     }
   },
 
-  async getCityByName(city: string): Promise<TCity | Error> {
+  async getCityByName(city: string, userId: number): Promise<TCity | Error> {
     try {
       const fetchNameCity = await fetch(
-        `${constants.API_CITY_URL}?nome=${city}`,
+        `${constants.API_CITY_URL}?nome=${city}&&userId=${userId}`,
       );
       const nameCityJson: TCity = await fetchNameCity.json();
       if (nameCityJson) {

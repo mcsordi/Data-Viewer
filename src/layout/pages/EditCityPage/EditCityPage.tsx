@@ -12,6 +12,7 @@ import { cityRequests } from '../../../api/CityRequests/request';
 import { useNavigate, useParams } from 'react-router-dom';
 import { TCity } from '../../../shared/types/Cities';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
+import { userRequest } from '../../../api/UserRequests/request';
 
 export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const cityParams = useParams().cidade;
@@ -19,10 +20,14 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const [city, setCity] = useState<TCity>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>();
+  const [userID, setUserID] = useState({} as number);
   useEffect(() => {
     const getCityUsingName = async () => {
       setLoading(true);
-      const dataCity = await cityRequests.getCityByName(cityParams as string);
+      const dataCity = await cityRequests.getCityByName(
+        cityParams as string,
+        userID,
+      );
       if (dataCity instanceof Error) {
         setError(dataCity.message);
       } else {
@@ -31,7 +36,21 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       setLoading(false);
     };
     getCityUsingName();
-  }, [cityParams]);
+  }, [cityParams, userID]);
+  useEffect(() => {
+    const getUserById = async () => {
+      setLoading(true);
+      const userEmail = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+      const userId = await userRequest.getUserByEmail(userEmail as string);
+      if (userId instanceof Error) {
+        setError(userId.message);
+      } else {
+        setUserID(userId);
+      }
+      setLoading(false);
+    };
+    getUserById();
+  }, []);
   return (
     <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
       <HeaderPage text={cityParams as string} />
@@ -59,13 +78,13 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       {error ? (
         <div className="mt-5 text-xl">Ocorreu um erro inesperado</div>
       ) : (
-        city?.map(({ id, nome, estado, userId }) => {
+        city?.map(({ id, nome, estado }) => {
           return (
             <div className="pt-5" key={id}>
               <Formik
-                initialValues={{ city: nome, state: estado, userId: userId }}
+                initialValues={{ city: nome, state: estado }}
                 onSubmit={async ({ city, state }) => {
-                  await cityRequests.updateCity(id, city, state);
+                  await cityRequests.updateCity(id, city, state, userID);
                   navigation(`/editar/cidade/${city}`);
                 }}
                 validationSchema={cityValidation}
@@ -85,7 +104,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                     name="state"
                     type="text"
                   />
-                  <SubmitButton text="Editar" />
+                  <SubmitButton loading={loading} text="Editar" />
                 </Form>
               </Formik>
             </div>

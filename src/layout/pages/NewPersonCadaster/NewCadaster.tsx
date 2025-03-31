@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
@@ -17,16 +17,18 @@ import {
   TCitiesRequest,
 } from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
+import { userRequest } from '../../../api/UserRequests/request';
 
 export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   const [citiesData, setCitiesData] = useState<TCitiesRequest>();
   const [citiesError, setCitiesError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [id, setId] = useState({} as number);
   const navigate = useNavigate();
   useEffect(() => {
     const getAllCities = async () => {
       setLoading(true);
-      const fetch = await cityRequests.getAllOfTheCities(2);
+      const fetch = await cityRequests.getAllOfTheCities(id);
       if (fetch instanceof Error) {
         setCitiesError(fetch.message);
       } else {
@@ -36,6 +38,19 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
       setLoading(false);
     };
     getAllCities();
+  }, [id]);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
+      const userId = await userRequest.getUserByEmail(emailUser as string);
+      if (userId instanceof Error) {
+        setCitiesError(userId.message);
+      } else {
+        setId(userId);
+      }
+    };
+    getUserId();
   }, []);
 
   return (
@@ -76,19 +91,13 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
               name: '',
               email: '',
               city: 'Selecionar',
-              userId: 2,
             }}
             validationSchema={validationSchema}
-            onSubmit={async ({ name, email, city, userId }, { resetForm }) => {
-              await peopleRequests.postNewUser(
-                name.trim(),
-                email,
-                city,
-                userId,
-              );
+            onSubmit={async ({ name, email, city }, { resetForm }) => {
+              await peopleRequests.postNewUser(name.trim(), email, city, id);
               navigate(`/editar/${name.trim()}`);
               resetForm({
-                values: { name: '', city: '', email: '', userId: 0 },
+                values: { name: '', city: '', email: '' },
               });
             }}
           >
@@ -114,7 +123,7 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
                 name="city"
                 FirstValue="Selecionar"
               ></SelectField>
-              <SubmitButton text="Enviar" />
+              <SubmitButton loading={loading} text="Enviar" />
             </Form>
           </Formik>
         </FormContainer>

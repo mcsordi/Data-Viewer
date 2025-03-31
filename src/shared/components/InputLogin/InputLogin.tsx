@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useField } from 'formik';
 
 export const InputLogin: React.FC<TInputLogin> = ({
-  label,
+  labelText,
   id,
   typeInput,
   ...props
@@ -20,11 +20,11 @@ export const InputLogin: React.FC<TInputLogin> = ({
           className="mb-0.5 text-md font-black text-gray-500"
           htmlFor="email"
         >
-          {label}
+          {labelText}
         </label>
         <input
           {...field}
-          {...meta}
+          {...props}
           type={id == 'pass' ? inputType : typeInput}
           id={id}
           className="border border-gray-400 rounded-md outline-none p-2 bg-white"

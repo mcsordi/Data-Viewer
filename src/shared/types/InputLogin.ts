@@ -1,5 +1,5 @@
 export type TInputLogin = {
-  label: string;
+  labelText: string;
   typeInput: 'email' | 'text' | 'password';
   id: string;
   name: string;
