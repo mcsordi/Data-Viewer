@@ -16,10 +16,7 @@ export const InputLogin: React.FC<TInputLogin> = ({
   return (
     <>
       <div className="flex flex-col">
-        <label
-          className="mb-0.5 text-md font-black text-gray-500"
-          htmlFor="email"
-        >
+        <label className="mb-0.5 text-md font-black text-gray-500" htmlFor={id}>
           {labelText}
         </label>
         <input

@@ -31,7 +31,6 @@ export const PeoplePage: React.FC = () => {
   const [peopleLength, setPeopleLength] = useState<number>();
   const [numOfPages, setNumOfPages] = useState<number>();
   const [deleted, setDeleted] = useState<number>();
-  const focus = useRef({} as HTMLInputElement);
   const [id, setId] = useState({} as number);
 
   const loopPagination = () => {
@@ -84,12 +83,11 @@ export const PeoplePage: React.FC = () => {
   return (
     <div className="dark:text-white flex flex-col gap-3 w-full px-0.5 xs:px-0">
       <ContainerGeneric>
-        {loading ? (
+        {loading && !peopleName ? (
           <InputSkeleton />
         ) : (
           <>
             <SearchInput
-              focus={focus}
               placeholder="Pesquise alguma pessoa aqui"
               value={peopleName as string}
               onChangeLogic={(e: string) =>
@@ -168,9 +166,12 @@ export const PeoplePage: React.FC = () => {
               peopleName != '' && (
                 <IssueMessage message={NENHUM_RESULTADO(peopleName || '')} />
               )}
-            {peopleData?.length === 0 && !responseError && !loading && (
-              <IssueMessage message="Nenhuma pessoa foi cadastrada" />
-            )}
+            {peopleData?.length === 0 &&
+              !responseError &&
+              !loading &&
+              peopleName == '' && (
+                <IssueMessage message="Nenhuma pessoa foi cadastrada" />
+              )}
           </tbody>
         </table>
         {!loading && !responseError && (

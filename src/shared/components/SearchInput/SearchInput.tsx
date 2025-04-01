@@ -3,18 +3,15 @@ type TSearchInput = {
   value: string;
   onChangeLogic: (e: string) => void;
   placeholder: 'Pesquise alguma cidade aqui' | 'Pesquise alguma pessoa aqui';
-  focus: React.Ref<HTMLInputElement>;
 };
 export const SearchInput: React.FC<TSearchInput> = ({
   value,
   onChangeLogic,
   placeholder,
-  focus,
 }) => {
   return (
     <div className="w-full h-10">
       <input
-        ref={focus}
         value={value}
         placeholder={placeholder}
         type="search"

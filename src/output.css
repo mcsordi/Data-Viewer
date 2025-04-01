@@ -624,6 +624,9 @@
   .z-10 {
     z-index: 10;
   }
+  .z-20 {
+    z-index: 20;
+  }
   .col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -713,6 +716,9 @@
   }
   .mx-0 {
     margin-inline: calc(var(--spacing) * 0);
+  }
+  .mx-0\.5 {
+    margin-inline: calc(var(--spacing) * 0.5);
   }
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
@@ -1408,6 +1414,12 @@
   .bg-zinc-100 {
     background-color: var(--color-zinc-100);
   }
+  .bg-zinc-400 {
+    background-color: var(--color-zinc-400);
+  }
+  .bg-zinc-600 {
+    background-color: var(--color-zinc-600);
+  }
   .bg-zinc-800 {
     background-color: var(--color-zinc-800);
   }
@@ -1565,6 +1577,9 @@
   }
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
+  }
+  .py-1\.5 {
+    padding-block: calc(var(--spacing) * 1.5);
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
@@ -2154,9 +2169,44 @@
       padding-inline: calc(var(--spacing) * 4);
     }
   }
+  .sm\:visible {
+    @media (width >= 40rem) {
+      visibility: visible;
+    }
+  }
+  .sm\:flex {
+    @media (width >= 40rem) {
+      display: flex;
+    }
+  }
   .sm\:hidden {
     @media (width >= 40rem) {
       display: none;
+    }
+  }
+  .sm\:w-48 {
+    @media (width >= 40rem) {
+      width: calc(var(--spacing) * 48);
+    }
+  }
+  .sm\:w-56 {
+    @media (width >= 40rem) {
+      width: calc(var(--spacing) * 56);
+    }
+  }
+  .sm\:w-64 {
+    @media (width >= 40rem) {
+      width: calc(var(--spacing) * 64);
+    }
+  }
+  .sm\:w-72 {
+    @media (width >= 40rem) {
+      width: calc(var(--spacing) * 72);
+    }
+  }
+  .sm\:w-sm {
+    @media (width >= 40rem) {
+      width: var(--container-sm);
     }
   }
   .sm\:w-xs {
@@ -2224,6 +2274,21 @@
       display: none;
     }
   }
+  .lg\:w-12 {
+    @media (width >= 64rem) {
+      width: calc(var(--spacing) * 12);
+    }
+  }
+  .lg\:w-16 {
+    @media (width >= 64rem) {
+      width: calc(var(--spacing) * 16);
+    }
+  }
+  .lg\:w-18 {
+    @media (width >= 64rem) {
+      width: calc(var(--spacing) * 18);
+    }
+  }
   .lg\:w-auto {
     @media (width >= 64rem) {
       width: auto;
@@ -2232,6 +2297,23 @@
   .lg\:flex-col {
     @media (width >= 64rem) {
       flex-direction: column;
+    }
+  }
+  .lg\:text-sm {
+    @media (width >= 64rem) {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+  }
+  .lg\:text-xs {
+    @media (width >= 64rem) {
+      font-size: var(--text-xs);
+      line-height: var(--tw-leading, var(--text-xs--line-height));
+    }
+  }
+  .xl\:w-full {
+    @media (width >= 80rem) {
+      width: 100%;
     }
   }
   .dark\:border-slate-400 {

@@ -31,7 +31,6 @@ export const CityPage: React.FC = () => {
   const debounce = useDebounce(cityName ? cityName : '');
   const lessOnePage = Math.ceil(((cityCount as number) - 1) / 7);
   const [deleted, setDeleted] = useState<number>();
-  const focus = useRef({} as HTMLInputElement);
   const [userId, setUserId] = useState({} as number);
 
   const loopPages = () => {
@@ -76,12 +75,11 @@ export const CityPage: React.FC = () => {
   return (
     <div className={`dark:text-white flex w-full flex-col px-0.5 xs:px-0`}>
       <ContainerGeneric>
-        {loading ? (
+        {loading && !cityName ? (
           <InputSkeleton />
         ) : (
           <>
             <SearchInput
-              focus={focus}
               placeholder="Pesquise alguma cidade aqui"
               value={cityName || ''}
               onChangeLogic={(e) => {
@@ -151,9 +149,12 @@ export const CityPage: React.FC = () => {
                   </tr>
                 );
               })}
-            {cities?.length == 0 && !fetchError && !loading && (
-              <IssueMessage message="Nenhuma cidade foi cadastrada" />
-            )}
+            {cities?.length == 0 &&
+              !fetchError &&
+              !loading &&
+              cityName == '' && (
+                <IssueMessage message="Nenhuma cidade foi cadastrada" />
+              )}
           </tbody>
         </table>
         <div

@@ -3,17 +3,20 @@ import { ThemeContext } from './contexts/ThemeContext/ThemeContext';
 import { DrawerButton } from './contexts/DrawerButton/DrawerButton';
 import { AuthProvider } from './contexts/AuthContext/AuthContext';
 import { RemovePhoto } from './contexts/RemovePhoto/RemovePhoto';
+import { UserDrawer } from './contexts/EditUserDrawer/UserDrawer';
 
 function App() {
   return (
     <AuthProvider>
-      <ThemeContext>
-        <RemovePhoto>
-          <DrawerButton visible>
-            <RouterBrowser />
-          </DrawerButton>
-        </RemovePhoto>
-      </ThemeContext>
+      <UserDrawer>
+        <ThemeContext>
+          <RemovePhoto>
+            <DrawerButton visible>
+              <RouterBrowser />
+            </DrawerButton>
+          </RemovePhoto>
+        </ThemeContext>
+      </UserDrawer>
     </AuthProvider>
   );
 }
