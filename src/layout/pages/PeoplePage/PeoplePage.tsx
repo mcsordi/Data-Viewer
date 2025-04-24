@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import {
@@ -9,13 +9,13 @@ import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../../shared/hooks';
 import { MdDelete } from 'react-icons/md';
-import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import { SearchInput } from '../../../shared/components/SearchInput/SearchInput';
 import { NewButton } from '../../../shared/components/NewButton/NewButton';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 import { userRequest } from '../../../api/UserRequests/request';
+import ReactPaginate from 'react-paginate';
 
 export const PeoplePage: React.FC = () => {
   const [peopleData, setPeopleData] = useState<TPeopleData>();
@@ -26,46 +26,38 @@ export const PeoplePage: React.FC = () => {
     pagina: '1',
   });
   const peopleName = searchParams.get('nome');
-  const currentPage = Number(searchParams.get('pagina'));
+  const currentPage = searchParams.get('pagina');
   const debouncing = useDebounce(peopleName || '');
   const [peopleLength, setPeopleLength] = useState<number>();
-  const [numOfPages, setNumOfPages] = useState<number>();
+  const totalPages = Math.ceil((peopleLength as number) / constants.MAX_LINHAS);
   const [deleted, setDeleted] = useState<number>();
-  const [id, setId] = useState({} as number);
+  //   const loopNumbers =
+  //     totalPages - Number(currentPage) < 4 ? totalPages - 4 : Number(currentPage);
 
-  const loopPagination = () => {
-    const arr = [];
-    if (numOfPages != undefined) {
-      for (let i = 1; i <= numOfPages; i++) {
-        arr.push(i);
-      }
-    }
-    return arr;
-  };
+  //   const loopPagination = () => {
+  //     const arr = [];
+  //     for (let i = loopNumbers; i <= totalPages; i++) {
+  //       arr.push(i);
+  //     }
+  //     return arr;
+  //   };
   useEffect(() => {
     const getPeopleData = async () => {
       setLoading(true);
       const response = await peopleRequests.getAll(
         debouncing,
         Number(currentPage),
-        id,
       );
       if (response instanceof Error) {
         setResponseError(response.message);
       } else {
-        setPeopleData(response);
-        setPeopleLength(response.length);
+        setPeopleData(response.data);
+        setPeopleLength(response.totalCount);
       }
       setLoading(false);
     };
     getPeopleData();
-  }, [currentPage, debouncing, deleted, id]);
-
-  useEffect(() => {
-    return setNumOfPages(
-      Math.ceil((peopleLength as number) / constants.MAX_LINHAS),
-    );
-  }, [peopleLength]);
+  }, [currentPage, debouncing, deleted]);
 
   useEffect(() => {
     const getUserId = async () => {
@@ -73,8 +65,6 @@ export const PeoplePage: React.FC = () => {
       const dataUser = await userRequest.getUserByEmail(emailUser as string);
       if (dataUser instanceof Error) {
         setResponseError(dataUser.message);
-      } else {
-        setId(dataUser);
       }
     };
     getUserId();
@@ -142,7 +132,10 @@ export const PeoplePage: React.FC = () => {
                         peopleRequests.deleteById(el.id);
                         setDeleted(el.id);
                         if (peopleLength != undefined) {
-                          if (Math.ceil((peopleLength - 1) / 7) < currentPage) {
+                          if (
+                            Math.ceil((peopleLength - 1) / 7) <
+                            Number(currentPage)
+                          ) {
                             setSearchParams((prev) => {
                               prev.set(
                                 'pagina',
@@ -176,14 +169,34 @@ export const PeoplePage: React.FC = () => {
         </table>
         {!loading && !responseError && (
           <div
-            className={`${numOfPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
+            className={`${totalPages == 0 && 'absolute'} flex w-full items-center justify-center gap-0.5 pt-4 mb-2`}
           >
-            <Pagination
-              currentPage={currentPage}
-              loopPagination={loopPagination()}
-              numOfPages={numOfPages}
-              setSearchParams={setSearchParams}
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel=">"
+              previousLabel="<"
+              pageCount={totalPages}
+              className="flex gap-2 cursor-pointer text-xl items-center"
+              onPageChange={(value) =>
+                setSearchParams((prev) => {
+                  prev.set('pagina', String(value.selected + 1));
+                  return prev;
+                })
+              }
+              pageLinkClassName="px-1.5 py-1.5 rounded-md hover:bg-gray-100 hover:dark:text-neutral-800 text-lg font-bold"
+              previousLinkClassName="text-3xl px-1 py-1.5 font-poppins"
+              nextLinkClassName="text-3xl px-1 py-1.5 font-poppins"
+              activeClassName="active"
+              activeLinkClassName="bg-amber-300 dark:text-neutral-800 text-white font-bold"
+              pageClassName="text-xl"
+              forcePage={Number(currentPage) - 1}
             />
+            {/* <Pagination
+              currentPage={Number(currentPage)}
+              numOfPages={totalPages}
+              loopPagination={loopPagination()}
+              setSearchParams={setSearchParams}
+            /> */}
           </div>
         )}
       </div>

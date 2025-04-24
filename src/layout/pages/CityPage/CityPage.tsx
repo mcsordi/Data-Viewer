@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import {
   cityRequests,
@@ -10,11 +10,11 @@ import { SearchInput } from '../../../shared/components/SearchInput/SearchInput'
 import { NewButton } from '../../../shared/components/NewButton/NewButton';
 import { useDebounce } from '../../../shared/hooks';
 import constants, { NENHUM_RESULTADO } from '../../../shared/facilities';
-import { Pagination } from '../../../shared/components/Pagination/Pagination';
 import { LoadComponent } from '../../../shared/components/LoadComponent/LoadComponent';
 import { IssueMessage } from '../../../shared/components/IssueMessage/IssueMessage';
 import { InputSkeleton } from '../../../shared/components/InputSkeleton/InputSkeleton';
 import { userRequest } from '../../../api/UserRequests/request';
+import ReactPaginate from 'react-paginate';
 
 export const CityPage: React.FC = () => {
   const [cities, setCities] = useState<TCitiesRequest>();
@@ -26,20 +26,12 @@ export const CityPage: React.FC = () => {
   const [fetchError, setFetchError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const cityName = searchParams.get('cidade');
-  const cityPage = searchParams.get('pagina');
+  const cityPage = Number(searchParams.get('pagina'));
   const totalPages = Math.ceil((cityCount as number) / constants.MAX_LINHAS);
   const debounce = useDebounce(cityName ? cityName : '');
-  const lessOnePage = Math.ceil(((cityCount as number) - 1) / 7);
   const [deleted, setDeleted] = useState<number>();
   const [userId, setUserId] = useState({} as number);
 
-  const loopPages = () => {
-    const citiesArr = [];
-    for (let i = 1; i <= totalPages; i++) {
-      citiesArr.push(i);
-    }
-    return citiesArr;
-  };
   useEffect(() => {
     const getIdUser = async () => {
       const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
@@ -55,11 +47,7 @@ export const CityPage: React.FC = () => {
   useEffect(() => {
     const getCities = async () => {
       setLoading(true);
-      const request = await cityRequests.getAll(
-        debounce,
-        cityPage ? cityPage : '1',
-        userId,
-      );
+      const request = await cityRequests.getAll(debounce, cityPage || 1);
       if (request instanceof Error) {
         setFetchError(request.message);
       } else {
@@ -138,7 +126,7 @@ export const CityPage: React.FC = () => {
                         onClick={() => {
                           cityRequests.deleteById(id), setDeleted(id);
                           setSearchParams((prev) => {
-                            prev.set('pagina', lessOnePage.toString());
+                            prev.set('pagina', String(cityPage));
                             return prev;
                           });
                         }}
@@ -158,13 +146,34 @@ export const CityPage: React.FC = () => {
           </tbody>
         </table>
         <div
-          className={`${fetchError && 'hidden'} ${loading && 'hidden'} ${totalPages < 1 && 'hidden'} w-full flex items-baseline justify-center p-2 pt-4`}
+          className={`${fetchError && 'hidden'} ${loading && 'hidden'} ${totalPages < 1 && 'hidden'} flex items-baseline justify-center p-2 pt-4`}
         >
-          <Pagination
-            currentPage={Number(cityPage)}
-            numOfPages={totalPages}
-            loopPagination={loopPages()}
-            setSearchParams={setSearchParams}
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={(value) =>
+              setSearchParams((prev) => {
+                prev.set('pagina', String(value.selected + 1));
+                return prev;
+              })
+            }
+            pageRangeDisplayed={1}
+            pageCount={totalPages}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            marginPagesDisplayed={4}
+            forcePage={Number(cityPage) - 1}
+            className="flex gap-2 cursor-pointer text-xl items-center"
+            pageLinkClassName="px-1.5 py-1.5 rounded-md hover:bg-gray-100 hover:dark:text-neutral-800 text-lg font-bold"
+            activeClassName="active"
+            previousLinkClassName="text-3xl px-1 py-1.5 font-poppins"
+            nextLinkClassName="text-3xl px-1 py-1.5 font-poppins"
+            activeLinkClassName="bg-amber-300 dark:text-neutral-800 text-white font-bold"
+
+            // currentPage={Number(cityPage)}
+            // numOfPages={totalPages}
+            // loopPagination={loopPages()}
+            // setSearchParams={setSearchParams}
           />
         </div>
       </div>

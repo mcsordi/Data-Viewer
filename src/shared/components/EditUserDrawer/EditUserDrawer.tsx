@@ -6,7 +6,6 @@ import { validationSchema } from './validationSchema';
 import { TUser, userRequest } from '../../../api/UserRequests/request';
 import { CgSpinnerAlt } from 'react-icons/cg';
 import { userDrawer } from '../../../contexts/EditUserDrawer/context';
-import { IoClose } from 'react-icons/io5';
 
 export const EditUserDrawer: React.FC = () => {
   const [error, setError] = useState<string>();
@@ -38,10 +37,6 @@ export const EditUserDrawer: React.FC = () => {
         className={`dark:bg-neutral-800 bg-white border-l-0 border-t-0 border border-r-0
                  border-slate-400 py-3  flex flex-col items-center justify-center gap-2`}
       >
-        <IoClose
-          className="absolute top-0 right-0 text-2xl text-red-600 cursor-pointer"
-          onClick={handleOpenClick}
-        />
         <ProfileImage />
       </div>
       {userData?.map((el) => {
@@ -102,6 +97,12 @@ export const EditUserDrawer: React.FC = () => {
           </Formik>
         );
       })}
+      <button
+        className="bg-slate-500 p-2 mx-2 mt-5 cursor-pointer text-white font-semibold text-xl rounded-md border border-white"
+        onClick={handleOpenClick}
+      >
+        Fechar
+      </button>
       {loading && !userData && (
         <div className="w-full text-xl pt-5 flex items-center justify-center">
           carregando<div className="animate-pulse">...</div>

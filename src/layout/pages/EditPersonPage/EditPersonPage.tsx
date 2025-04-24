@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
@@ -20,59 +20,60 @@ import {
   TCitiesRequest,
 } from '../../../api/CityRequests/request';
 import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
-import { userRequest } from '../../../api/UserRequests/request';
 
 export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const navigate = useNavigate();
   const { nome } = useParams();
   const [personData, setPersonData] = useState<TPeopleData>();
+  const [personId, setPersonId] = useState<SetStateAction<number>>();
   const [cityData, setCityData] = useState<TCitiesRequest>();
   const [personError, setPersonError] = useState<string>();
   const [cityError, setCityError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
-  const [id, setId] = useState({} as number);
+
   useEffect(() => {
     const getPersonByName = async () => {
       setLoading(true);
-      const person = await peopleRequests.getByName(nome || '', id);
+      const person = await peopleRequests.getByName(nome || '');
       if (person instanceof Error) {
         setPersonError(person.message);
       } else {
-        setPersonData(person.data);
+        setPersonId(person.id);
       }
       setLoading(false);
     };
     getPersonByName();
-  }, [nome, id]);
+  }, [nome]);
 
   useEffect(() => {
     const getCities = async () => {
       setLoading(true);
 
-      const fetch = await cityRequests.getAllOfTheCities(id);
+      const fetch = await cityRequests.getAllCities();
       if (fetch instanceof Error) {
         setCityError(fetch.message);
       } else {
         setCityData(fetch.data);
       }
-
       setLoading(false);
     };
     getCities();
-  }, [id]);
+  }, []);
 
   useEffect(() => {
-    const getUserId = async () => {
-      const emailUser = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
-      const userId = await userRequest.getUserByEmail(emailUser as string);
-      if (userId instanceof Error) {
-        setCityError(userId.message);
+    const getDataById = async () => {
+      setLoading(true);
+      if (!personId) return;
+      const fetch = await peopleRequests.getPersonById(Number(personId));
+      if (fetch instanceof Error) {
+        setCityError(fetch.message);
       } else {
-        setId(userId);
+        setPersonData(fetch);
       }
+      setLoading(false);
     };
-    getUserId();
-  }, []);
+    getDataById();
+  }, [personId]);
 
   return (
     <div className="w-full h-screen dark:text-white px-0.5 xs:px-0">
@@ -98,7 +99,7 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
         <div className="mt-5 text-xl">Ocorreu um erro inesperado</div>
       ) : (
         <FormContainer>
-          {personData?.map(({ nome, email, cidade, id, userId }) => {
+          {personData?.map(({ nome, email, cidade, id }) => {
             return (
               <Formik
                 key={id}
@@ -106,7 +107,6 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                   name: nome,
                   email: email,
                   city: cidade,
-                  userId: 2,
                 }}
                 onSubmit={async ({ name, email, city }) => {
                   return (
@@ -115,7 +115,6 @@ export const EditPersonPage: React.FC<IconsEditPage> = ({ editIcons }) => {
                       name.trim(),
                       email,
                       city,
-                      userId,
                     ),
                     navigate(`/editar/${name.trim()}`)
                   );

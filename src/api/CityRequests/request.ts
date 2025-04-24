@@ -1,4 +1,3 @@
-import { use } from 'react';
 import constants from '../../shared/facilities';
 import { TCity } from '../../shared/types/Cities';
 export type TCitiesRequest = {
@@ -17,17 +16,13 @@ export type TCityData = {
 };
 
 export const cityRequests = {
-  async getAll(
-    name = '',
-    page = '1',
-    userId: number,
-  ): Promise<Error | TCityData> {
+  async getAll(name = '', page = 1): Promise<Error | TCityData> {
     try {
       const getAllCities = await fetch(
-        `${constants.API_CITY_URL}/?nome_like=${name}&_page=${page}&_limit=${constants.MAX_LINHAS}&userId=${userId}`,
+        `${constants.API_CITY_URL}?nome_like=${name}&_page=${page}&_limit=${constants.MAX_LINHAS}`,
       );
       const citiesTotalCount =
-        Number(getAllCities.headers.get('X-Total-Count')) || 0;
+        Number(getAllCities.headers.get('x-total-count')) || 0;
 
       const citiesJson: TCitiesRequest = await getAllCities.json();
       if (citiesJson) {
@@ -40,11 +35,9 @@ export const cityRequests = {
       );
     }
   },
-  async getAllOfTheCities(userId: number): Promise<TCityData | Error> {
+  async getAllCities(): Promise<TCityData | Error> {
     try {
-      const allCities = await fetch(
-        `${constants.API_CITY_URL}?userId=${userId}`,
-      );
+      const allCities = await fetch(`${constants.API_CITY_URL}`);
       const citiesResponse: TCitiesRequest = await allCities.json();
 
       if (citiesResponse) {
@@ -63,10 +56,10 @@ export const cityRequests = {
     }
   },
 
-  async getCityByName(city: string, userId: number): Promise<TCity | Error> {
+  async getCityByName(city: string): Promise<TCity | Error> {
     try {
       const fetchNameCity = await fetch(
-        `${constants.API_CITY_URL}?nome=${city}&&userId=${userId}`,
+        `${constants.API_CITY_URL}?nome=${city}`,
       );
       const nameCityJson: TCity = await fetchNameCity.json();
       if (nameCityJson) {
@@ -79,14 +72,14 @@ export const cityRequests = {
       );
     }
   },
-  async deleteById(id: number): Promise<Response | Error> {
+  async deleteById(id: number): Promise<TCitiesRequest | Error> {
     try {
       const deleteMethod = await fetch(`${constants.API_CITY_URL}/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       });
       if (deleteMethod) {
-        return deleteMethod;
+        deleteMethod;
       }
       return new Error('Erro ao deletar cidade');
     } catch (error) {
@@ -102,13 +95,13 @@ export const cityRequests = {
     userId = 2,
   ): Promise<Response | Error> {
     try {
-      const methodUptade = await fetch(`${constants.API_CITY_URL}/${id}`, {
+      const methodUpdate = await fetch(`${constants.API_CITY_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: name, estado: state, userId: userId }),
       });
-      if (methodUptade) {
-        return methodUptade;
+      if (methodUpdate) {
+        return methodUpdate;
       }
       return new Error('Erro ao atualizar cidade');
     } catch (error) {

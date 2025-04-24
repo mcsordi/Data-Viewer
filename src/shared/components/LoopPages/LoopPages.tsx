@@ -12,11 +12,11 @@ export const LoopPages: React.FC<TLoopPages> = ({
   setSearchParams,
 }) => {
   return (
-    <>
+    <div className="flex max-w-48 truncate">
       {loopPagination?.map((el, idx) => {
         return (
           <div
-            className={`${idx + 1 === currentPage && 'bg-amber-300 text-white rounded-md px-2 dark:text-neutral-800'} px-1 cursor-pointer text-2xl`}
+            className={`${el === currentPage && 'bg-amber-300 text-white rounded-md px-2 dark:text-neutral-800'} ${el > 0 ? 'visible' : 'hidden'} px-1 cursor-pointer text-2xl`}
             key={idx}
             onClick={(e) => {
               setSearchParams((prev: URLSearchParams) => {
@@ -29,6 +29,6 @@ export const LoopPages: React.FC<TLoopPages> = ({
           </div>
         );
       })}
-    </>
+    </div>
   );
 };

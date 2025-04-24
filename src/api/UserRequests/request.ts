@@ -4,7 +4,7 @@ export type TUser = {
   email: string;
   senha: string;
   imagem?: string;
-  id: '';
+  id: number;
 }[];
 
 export const userRequest = {

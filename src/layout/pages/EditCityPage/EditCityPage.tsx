@@ -20,14 +20,10 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
   const [city, setCity] = useState<TCity>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>();
-  const [userID, setUserID] = useState({} as number);
   useEffect(() => {
     const getCityUsingName = async () => {
       setLoading(true);
-      const dataCity = await cityRequests.getCityByName(
-        cityParams as string,
-        userID,
-      );
+      const dataCity = await cityRequests.getCityByName(cityParams as string);
       if (dataCity instanceof Error) {
         setError(dataCity.message);
       } else {
@@ -36,7 +32,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       setLoading(false);
     };
     getCityUsingName();
-  }, [cityParams, userID]);
+  }, [cityParams]);
   useEffect(() => {
     const getUserById = async () => {
       setLoading(true);
@@ -44,8 +40,6 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
       const userId = await userRequest.getUserByEmail(userEmail as string);
       if (userId instanceof Error) {
         setError(userId.message);
-      } else {
-        setUserID(userId);
       }
       setLoading(false);
     };
@@ -84,7 +78,7 @@ export const EditCityPage: React.FC<IconsEditPage> = ({ editIcons }) => {
               <Formik
                 initialValues={{ city: nome, state: estado }}
                 onSubmit={async ({ city, state }) => {
-                  await cityRequests.updateCity(id, city, state, userID);
+                  await cityRequests.updateCity(id, city, state);
                   navigation(`/editar/cidade/${city}`);
                 }}
                 validationSchema={cityValidation}

@@ -2,12 +2,11 @@ import { Form, Formik } from 'formik';
 import { InputLogin } from '../../../shared/components/InputLogin/InputLogin';
 import { LoginButton } from '../../../shared/components/LoginButton/LoginButton';
 import { ValidLink } from '../../../shared/components/ValidLink/ValidLink';
-import { validationSchema } from './validationSchema';
 import { userRequest } from '../../../api/UserRequests/request';
+import { validationSchema } from './validationSchema';
 import { useNavigate } from 'react-router-dom';
-
-export const CadasterPage: React.FC = () => {
-  const navigate = useNavigate();
+export const Cadaster: React.FC = () => {
+  const navigation = useNavigate();
   return (
     <section className="w-full h-screen flex justify-center items-center bg-white">
       <div className="flex flex-col w-sm py-6  shadow-neutral-400 shadow-2xl rounded-md items-center justify-center bg-gray-100">
@@ -15,7 +14,7 @@ export const CadasterPage: React.FC = () => {
           initialValues={{ name: '', email: '', pass: '' }}
           onSubmit={async ({ name, email, pass }) => {
             await userRequest.postUserData(name, email, pass);
-            navigate('/');
+            navigation('/');
           }}
           validationSchema={validationSchema}
         >

@@ -9,7 +9,6 @@ import { Skeleton } from '../../../shared/components/Skeleton/Skeleton';
 import { cityRequests } from '../../../api/CityRequests/request';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { RxDividerVertical } from 'react-icons/rx';
-import { userRequest } from '../../../api/UserRequests/request';
 
 export const HomePage: React.FC = () => {
   const [peopleCount, setPeopleCount] = useState<number>(0);
@@ -18,12 +17,11 @@ export const HomePage: React.FC = () => {
   const [cityCount, setCityCount] = useState<number>(0);
   const [errorCities, setErrorCities] = useState<string>();
   const [errorPeople, setErrorPeople] = useState<string>();
-  const [logUser, setLogUser] = useState<number>();
 
   useEffect(() => {
     const fetchCities = async () => {
       setLoading(true);
-      const fetch = await cityRequests.getAllOfTheCities(logUser as number);
+      const fetch = await cityRequests.getAllCities();
       if (fetch instanceof Error) {
         setErrorCities(fetch.message);
       } else {
@@ -34,7 +32,7 @@ export const HomePage: React.FC = () => {
     };
     const fetchPeople = async () => {
       setLoading(true);
-      const fetch = await peopleRequests.getAllOfThePeople(logUser as number);
+      const fetch = await peopleRequests.getAll();
       if (fetch instanceof Error) {
         setErrorPeople(fetch.message);
       } else {
@@ -46,19 +44,8 @@ export const HomePage: React.FC = () => {
 
     fetchCities();
     fetchPeople();
-  }, [logUser]);
-  useEffect(() => {
-    const loggedUser = async () => {
-      const email = localStorage.getItem('ACCESS_APPLICATION_EMAIL');
-      const dataUser = await userRequest.getUserByEmail(email as string);
-      if (dataUser instanceof Error) {
-        setErrorPeople(dataUser.message);
-      } else {
-        setLogUser(dataUser);
-      }
-    };
-    loggedUser();
   }, []);
+
   return (
     <div className="w-full h-full dark:text-white px-0.5 xs:px-0">
       <ContainerGeneric>

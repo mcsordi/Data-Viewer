@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ContainerGeneric } from '../../../shared/components/ContainerEditors/ContainerEditors';
 import { EditComponent } from '../../../shared/components/EditComponent/EditComponent';
 import { IconsEditPage } from '../../../shared/types/IconsEditPage';
@@ -28,7 +28,7 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
   useEffect(() => {
     const getAllCities = async () => {
       setLoading(true);
-      const fetch = await cityRequests.getAllOfTheCities(id);
+      const fetch = await cityRequests.getAllCities();
       if (fetch instanceof Error) {
         setCitiesError(fetch.message);
       } else {
@@ -94,7 +94,7 @@ export const NewPersonCadaster: React.FC<IconsEditPage> = ({ editIcons }) => {
             }}
             validationSchema={validationSchema}
             onSubmit={async ({ name, email, city }, { resetForm }) => {
-              await peopleRequests.postNewUser(name.trim(), email, city, id);
+              await peopleRequests.postNewUser(name.trim(), email, city);
               navigate(`/editar/${name.trim()}`);
               resetForm({
                 values: { name: '', city: '', email: '' },

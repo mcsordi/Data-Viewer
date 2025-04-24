@@ -13,7 +13,7 @@ export const ProfileImage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string>();
   const [userData, setUserData] = useState({} as TUser);
-  const [userId, setUserId] = useState<''>();
+  const [userId, setUserId] = useState<number>();
   const [onHandleImage, setOnHandleImage] = useState<boolean>(false);
   const { onClickBtn } = useContext(removePhoto);
 

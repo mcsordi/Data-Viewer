@@ -1,21 +1,21 @@
+/* eslint-disable react/prop-types */
 import { Form, Formik } from 'formik';
 import { InputLogin } from '../../../shared/components/InputLogin/InputLogin';
 import { validationSchema } from './validationSchema';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { LoginButton } from '../../../shared/components/LoginButton/LoginButton';
 import { ValidLink } from '../../../shared/components/ValidLink/ValidLink';
 import { authContext } from '../../../contexts/AuthContext/context';
-import { useNavigate } from 'react-router-dom';
+import { Children } from '../../../shared/types/Children';
 
-export const LoginPage: React.FC = () => {
+export const LoginPage: React.FC<Children> = ({ children }) => {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [deniedUser, setDeniedUser] = useState<boolean>();
   const { login, isAuthenticated } = useContext(authContext);
-  const navigate = useNavigate();
-  useEffect(() => {
-    isAuthenticated && navigate('/pagina-inicial');
-  }, [isAuthenticated, navigate]);
+  if (isAuthenticated) {
+    return <>{children}</>;
+  }
 
   return (
     <section className="items-center justify-center w-full h-screen flex">

@@ -13,9 +13,6 @@ import { EditPersonPage } from '../../layout/pages/EditPersonPage/EditPersonPage
 import { NewCityCadaster } from '../../layout/pages/NewCityCadaster/NewCityCadaster';
 import { EditCityPage } from '../../layout/pages/EditCityPage/EditCityPage';
 import { PiBuildingApartmentFill } from 'react-icons/pi';
-import { LoginPage } from '../../layout/pages/LoginPage/LoginPage';
-import { CadasterPage } from '../../layout/pages/CadasterPage/CadasterPage';
-import { ProtectedRoutes } from './ProtectedRoutes';
 
 export const RouterBrowser: React.FC = () => {
   const editIcons = [
@@ -49,7 +46,7 @@ export const RouterBrowser: React.FC = () => {
     {
       icon: <FaHome />,
       text: 'Página Inicial',
-      whereTo: '/pagina-inicial',
+      whereTo: '/',
     },
     {
       icon: <BsBuildingsFill />,
@@ -66,31 +63,27 @@ export const RouterBrowser: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/cadastrar" element={<CadasterPage />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<CommonPage navigation={navigate} />}>
-            <Route path="/pagina-inicial" element={<HomePage />} />
-            <Route path="/cidades" element={<CityPage />} />
-            <Route path="/pessoas" element={<PeoplePage />} />
-            <Route
-              path="/nova-pessoa"
-              element={<NewPersonCadaster editIcons={editIcons} />}
-            />
-            <Route
-              path="/nova-cidade"
-              element={<NewCityCadaster editIcons={editIcons} />}
-            />
-            <Route
-              path="/editar/:nome"
-              element={<EditPersonPage editIcons={editIcons} />}
-            />
-            <Route
-              path="/editar/cidade/:cidade"
-              element={<EditCityPage editIcons={editIcons} />}
-            />
-            <Route path={'/*'} element={<Navigate to="/pagina-inicial" />} />
-          </Route>
+        <Route path="/" element={<CommonPage navigation={navigate} />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/cidades" element={<CityPage />} />
+          <Route path="/pessoas" element={<PeoplePage />} />
+          <Route
+            path="/nova-pessoa"
+            element={<NewPersonCadaster editIcons={editIcons} />}
+          />
+          <Route
+            path="/nova-cidade"
+            element={<NewCityCadaster editIcons={editIcons} />}
+          />
+          <Route
+            path="/editar/:nome"
+            element={<EditPersonPage editIcons={editIcons} />}
+          />
+          <Route
+            path="/editar/cidade/:cidade"
+            element={<EditCityPage editIcons={editIcons} />}
+          />
+          <Route path={'*'} element={<Navigate to="/pagina-inicial" />} />
         </Route>
       </Routes>
     </BrowserRouter>
